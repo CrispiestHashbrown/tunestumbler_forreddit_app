@@ -10,7 +10,10 @@ const navigationItems = () => (
         <NavigationItem link="/hot">Hot</NavigationItem>
         <NavigationItem link="/best">Best</NavigationItem>
         <NavigationItem link="/filters">Filters</NavigationItem>
-        <NavigationItem link="/account">Account</NavigationItem>
+        {/* TODO: render these conditionally */}
+        <NavigationItem link="/settings">Settings</NavigationItem>
+        <NavigationItem link="/login">Log in</NavigationItem>
+        <NavigationItem link="/signup">Sign up</NavigationItem>
     </ul>
 );
 

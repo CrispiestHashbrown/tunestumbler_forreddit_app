@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import classes from './Auth.css';
+import classes from './Signup.css';
 import * as actions from '../../store/actions/index';
 
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 
-class Auth extends Component {
+class Signup extends Component {
     state = {
         controls: {
             email: {
@@ -33,7 +33,7 @@ class Auth extends Component {
                 value: '',
                 validation: {
                     required: true,
-                    minLength: 1
+                    minLength: 8
                  },
                 valid: false,
                 touched: false
@@ -90,7 +90,7 @@ class Auth extends Component {
 
     submitHandler = (event) => {
         event.preventDefault();
-        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value);
+        this.props.onSignup(this.state.controls.email.value, this.state.controls.password.value);
     }
 
     render () {
@@ -115,20 +115,20 @@ class Auth extends Component {
         ));
 
         return (
-            <div className={classes.Auth}>
+            <div className={classes.Signup}>
                 <form onSubmit={this.submitHandler}>
                     {form}
-                    <Button buttonType="Successful">Log in</Button>
+                    <Button buttonType="Successful">Sign up</Button>
                 </form>
-            </div>
+           </div>
         );
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onAuth: (email, password) => dispatch(actions.auth(email, password))
+        onSignup: (email, password) => dispatch(actions.signup(email, password))
     };
 };
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(null, mapDispatchToProps)(Signup);
