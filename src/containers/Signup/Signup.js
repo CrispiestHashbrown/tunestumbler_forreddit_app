@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import classes from './Signup.css';
 import * as actions from '../../store/actions/index';
 
+import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 class Signup extends Component {
     state = {
@@ -102,7 +104,7 @@ class Signup extends Component {
             });
         }
 
-        const form = formElementsArray.map(formElement => (
+        let form = formElementsArray.map(formElement => (
             <Input 
                 key={formElement.id}
                 elementType={formElement.config.elementType}
@@ -114,8 +116,25 @@ class Signup extends Component {
                 changed={(event) => this.inputChangedHandler(event, formElement.id)} />
         ));
 
+        if (this.props.loading) {
+            form = <Spinner />
+        }
+
+        let errorMessage = null;
+
+        if (this.props.timestamp && this.props.message) {
+            errorMessage = (
+                <Auxiliary>
+                    <p>{this.props.timestamp}</p>
+                    <p>{this.props.message}</p>
+                </Auxiliary>
+            );
+        }
+
         return (
             <div className={classes.Signup}>
+                {/* TODO: add error styling */}
+                {errorMessage}
                 <form onSubmit={this.submitHandler}>
                     {form}
                     <Button buttonType="Successful">Sign up</Button>
@@ -125,10 +144,18 @@ class Signup extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        loading: state.signup.loading,
+        timestamp: state.signup.timestamp,
+        message: state.signup.message
+    };
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
         onSignup: (email, password) => dispatch(actions.signup(email, password))
     };
 };
 
-export default connect(null, mapDispatchToProps)(Signup);
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

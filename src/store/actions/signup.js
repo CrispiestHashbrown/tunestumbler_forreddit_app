@@ -41,7 +41,10 @@ export const signup = (email, password, shouldSignup) => {
                 dispatch(signupSuccess(response.data.userId, response.data.email));
             })
             .catch(error => {
-                dispatch(signupFail(error.timestamp, error.message));
+                // TODO: add response codes
+                // also need to change this if the Tunestumbler response turns out to be different
+                // can check the API of the error handler that is used
+                dispatch(signupFail(error.response.data.timestamp, error.response.data.message));
             });
     };
 };
