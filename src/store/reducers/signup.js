@@ -1,10 +1,7 @@
-import * as actionTypes from '../action/actionTypes';
+import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../utility';
-import { signupFail } from '../actions/signup';
 
 const initialState = {
-    userId: null,
-    email: null,
     timestamp: null,
     message: null,
     loading: false
@@ -20,8 +17,6 @@ const signupStart = (state, action) => {
 
 const signupSuccess = (state, action) => {
     return updateObject(state, {
-        userId: action.userId,
-        email: action.email,
         timestamp: null,
         message: null,
         loading: false

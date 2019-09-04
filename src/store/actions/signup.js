@@ -8,11 +8,9 @@ export const signupStart = () => {
     };
 };
 
-export const signupSuccess = (userId, email) => {
+export const signupSuccess = () => {
     return {
-        type: actionTypes.SIGNUP_SUCCESS,
-        userId: userId,
-        email: email
+        type: actionTypes.SIGNUP_SUCCESS
     };
 };
 
@@ -38,7 +36,7 @@ export const signup = (email, password, shouldSignup) => {
         const url = 'https://jsonplaceholder.typicode.com/posts';
         axios.post(url, signupData)
             .then(response => {
-                dispatch(signupSuccess(response.data.userId, response.data.email));
+                dispatch(signupSuccess());
             })
             .catch(error => {
                 // TODO: add response codes
