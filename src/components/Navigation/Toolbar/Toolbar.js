@@ -6,7 +6,8 @@ import NavigationItems from '../../Navigation/NavigationItems/NavigationItems';
 const toolbar = (props) => (
     <header className={classes.Toolbar}>
         <nav>
-            <NavigationItems />
+            <NavigationItems 
+                isLoggedIn={props.isLoggedIn} />
         </nav>
     </header>
 );

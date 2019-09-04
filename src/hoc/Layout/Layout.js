@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import classes from './Layout.css';
 
@@ -9,7 +10,8 @@ class Layout extends Component {
     render () {
         return (
             <Auxiliary>
-                <Toolbar />
+                <Toolbar 
+                    isLoggedIn={this.props.isLoggedIn} />
                 <main className={classes.Content}>
                     {this.props.children}
                 </main>
@@ -18,4 +20,10 @@ class Layout extends Component {
     }
 }
 
-export default Layout;
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.login.token !== null
+    };
+};
+
+export default connect(mapStateToProps)(Layout);
