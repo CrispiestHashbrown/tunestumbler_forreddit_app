@@ -3,5 +3,6 @@ export {
 } from './signup';
 
 export {
-    login
+    login,
+    logout
 } from './login';
