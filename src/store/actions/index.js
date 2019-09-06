@@ -4,5 +4,6 @@ export {
 
 export {
     login,
-    logout
+    logout,
+    loginCheckState
 } from './login';

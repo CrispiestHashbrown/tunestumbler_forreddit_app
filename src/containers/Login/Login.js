@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import classes from './Login.css';
 import * as actions from '../../store/actions/index';
@@ -131,8 +132,14 @@ class Login extends Component {
             );
         }
 
+        let loginRedirect = null;
+        if (this.props.isLoggedIn) {
+            loginRedirect = <Redirect to="/filters" />
+        }
+
         return (
             <div className={classes.Login}>
+                {loginRedirect}
                 {/* TODO: add error styling */}
                 {errorMessage}
                 <form onSubmit={this.submitHandler}>
@@ -148,7 +155,8 @@ const mapStateToProps = (state) => {
     return {
         loading: state.signup.loading,
         timestamp: state.signup.timestamp,
-        message: state.signup.message
+        message: state.signup.message,
+        isLoggedIn: state.login.token !== null
     };
 };
 

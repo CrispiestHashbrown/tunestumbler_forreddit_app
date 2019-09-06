@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Layout from './hoc/Layout/Layout';
 import Signup from './containers/Signup/Signup';
 import Login from './containers/Login/Login';
 import Logout from './containers/Logout/Logout';
+import * as actions from './store/actions/index';
 
 class App extends Component {
+  componentDidMount () {
+    this.props.onTryAutoSignup();
+  }
+
   render() {
     return (
       <div>
@@ -26,4 +32,10 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onTryAutoSignup: () => dispatch(actions.loginCheckState())
+  };
+};
+
+export default withRouter(connect(null, mapDispatchToProps)(App));
