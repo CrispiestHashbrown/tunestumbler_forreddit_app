@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Layout from './hoc/Layout/Layout';
@@ -14,23 +14,42 @@ class App extends Component {
   }
 
   render() {
+    let routes = (
+      <Switch>
+        <Route path="/signup" component={Signup} />
+        <Route path="/login" component={Login} />
+        <Redirect to="/login" />
+      </Switch>
+    );
+
+    if (this.props.isLoggedIn) {
+      routes = (
+        <Switch>
+          {/* <Route path="/connect" component={Connect} />
+          <Route path="/filters" component={Filters} />
+          <Route path="/results" component={Results} />
+          <Route path="/settings" component={Settings} /> */}
+          <Route path="/logout" component={Logout} />
+          {/* <Redirect to="/filters" /> */}
+        </Switch>
+      );
+    }
+
     return (
       <div>
         <Layout>
-          <Switch>
-            <Route path="/signup" component={Signup} />
-            <Route path="/login" component={Login} />
-            {/* <Route path="/connect" component={Connect} />
-            <Route path="/filters" component={Filters} />
-            <Route path="/results" component={Results} />
-            <Route path="/settings" component={Settings} />  */}
-            <Route path="/logout" component={Logout} />
-          </Switch>
+          {routes}
         </Layout>
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    isLoggedIn: state.login.token !== null
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -38,4 +57,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
