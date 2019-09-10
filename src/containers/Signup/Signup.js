@@ -126,8 +126,8 @@ class Signup extends Component {
         if (this.props.timestamp && this.props.message) {
             errorMessage = (
                 <Auxiliary>
-                    <p>{this.props.timestamp}</p>
-                    <p>{this.props.message}</p>
+                    <p>Timestamp: {this.props.timestamp}</p>
+                    <p>Error: {this.props.message}</p>
                 </Auxiliary>
             );
         }

@@ -22,7 +22,7 @@ class Layout extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        isLoggedIn: state.login.token !== null
+        isLoggedIn: state.login.loginToken !== null
     };
 };
 

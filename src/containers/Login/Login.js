@@ -126,15 +126,15 @@ class Login extends Component {
         if (this.props.timestamp && this.props.message) {
             errorMessage = (
                 <Auxiliary>
-                    <p>{this.props.timestamp}</p>
-                    <p>{this.props.message}</p>
+                    <p>Timestamp: {this.props.timestamp}</p>
+                    <p>Error: {this.props.message}</p>
                 </Auxiliary>
             );
         }
 
         let loginRedirect = null;
         if (this.props.isLoggedIn) {
-            loginRedirect = <Redirect to="/filters" />
+            loginRedirect = <Redirect to="/connect" />
         }
 
         return (
@@ -153,10 +153,10 @@ class Login extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        loading: state.signup.loading,
-        timestamp: state.signup.timestamp,
-        message: state.signup.message,
-        isLoggedIn: state.login.token !== null
+        isLoggedIn: state.login.loginToken !== null,
+        loading: state.login.loading,
+        timestamp: state.login.timestamp,
+        message: state.login.message
     };
 };
 

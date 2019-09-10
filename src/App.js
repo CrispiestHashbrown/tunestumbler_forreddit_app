@@ -6,6 +6,7 @@ import Layout from './hoc/Layout/Layout';
 import Signup from './containers/Signup/Signup';
 import Login from './containers/Login/Login';
 import Logout from './containers/Logout/Logout';
+import Connect from './containers/Connect/Connect';
 import * as actions from './store/actions/index';
 
 class App extends Component {
@@ -25,8 +26,8 @@ class App extends Component {
     if (this.props.isLoggedIn) {
       routes = (
         <Switch>
-          {/* <Route path="/connect" component={Connect} />
-          <Route path="/filters" component={Filters} />
+          <Route path="/connect" component={Connect} />
+          {/* <Route path="/filters" component={Filters} />
           <Route path="/results" component={Results} />
           <Route path="/settings" component={Settings} /> */}
           <Route path="/logout" component={Logout} />
@@ -47,7 +48,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isLoggedIn: state.login.token !== null
+    isLoggedIn: state.login.loginToken !== null
   };
 };
 

@@ -28,7 +28,7 @@ export const signupFail = (timestamp, message) => {
     };
 };
 
-export const signup = (email, password, shouldSignup) => {
+export const signup = (email, password) => {
     return (dispatch) => {
         dispatch(signupStart());
         const signupData = {
@@ -44,20 +44,14 @@ export const signup = (email, password, shouldSignup) => {
         const url = 'http://localhost:8080/tunestumbler-wrapper-for-reddit/users';
         // const url = 'http://ec2-54-183-128-17.us-west-1.compute.amazonaws.com:8080/tunestumbler-wrapper-for-reddit/users';
         // const url = 'https://jsonplaceholder.typicode.com/posts';
-        // this works with the jsonplaceholder url
-        // but need to configure CORS for Tunestumbler API
         axios.post(url, signupData, {headers})
             .then(response => {
-                console.log(response);
                 dispatch(signupSuccess());
                 dispatch(signupReset());
             })
             .catch(error => {
-                // TODO: add response codes
-                // also need to change this if the Tunestumbler response turns out to be different
-                // can check the API of the error handler that is used
-                console.log(error);
-                // dispatch(signupFail(error.response.timestamp, error.response.message));
+                error = Object.assign({}, error).response.data;
+                dispatch(signupFail(error.timestamp, error.message));
             });
     };
 };

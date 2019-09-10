@@ -8,12 +8,12 @@ export const loginStart = () => {
     };
 };
 
-export const loginSuccess = (userId, email, token) => {
+export const loginSuccess = (userId, email, loginToken) => {
     return {
         type: actionTypes.LOGIN_SUCCESS,
         userId: userId,
         email: email,
-        token: token
+        loginToken: loginToken
     };
 };
 
@@ -28,19 +28,19 @@ export const loginFail = (timestamp, message) => {
 export const logout = () => {
     localStorage.removeItem('userId');
     localStorage.removeItem('email');
-    localStorage.removeItem('token');
+    localStorage.removeItem('loginToken');
     localStorage.removeItem('expirationDate');
-    localStorage.removeItem('lifespan');
+    localStorage.removeItem('lifetime');
     return {
         type: actionTypes.LOGIN_LOGOUT
     };
 };
 
-export const checkLoginTimeout = (lifespan) => {
+export const checkLoginTimeout = (lifetime) => {
     return (dispatch) => {
         setTimeout(() => {
             dispatch(logout());
-        }, lifespan);
+        }, lifetime);
     };
 };
 
@@ -53,33 +53,27 @@ export const login = (email, password, shouldLogin) => {
         };
 
         const headers = {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
         };
         
-        // const url = 'http://localhost:8080/tunestumbler-wrapper-for-reddit/users/login';
-        // const url = 'https://jsonplaceholder.typicode.com/posts';
-        // this works with the jsonplaceholder url
-        // but need to configure CORS for Tunestumbler API
-        const url = 'https://jsonplaceholder.typicode.com/posts';
+        const url = 'http://localhost:8080/tunestumbler-wrapper-for-reddit/users/login';
+        // const url = 'http://ec2-54-183-128-17.us-west-1.compute.amazonaws.com:8080/tunestumbler-wrapper-for-reddit/users/login';
         axios.post(url, loginData, {headers})
             .then(response => {
-                // need to get userId and token from the headers
-                const lifespan = response.data.lifespan * 1000;
-                const expirationDate = new Date(new Date().getTime() + lifespan);
+                const lifetime = response.headers.lifetime * 1000;
+                const expirationDate = new Date(new Date().getTime() + lifetime);
                 localStorage.setItem('userId', response.headers.UserID);
                 localStorage.setItem('email', loginData.email);
-                localStorage.setItem('token', response.headers.Authorization);
+                localStorage.setItem('loginToken', response.headers.Authorization);
                 localStorage.setItem('expirationDate', expirationDate);
-                localStorage.setItem('lifespan', lifespan);
+                localStorage.setItem('lifetime', lifetime);
                 dispatch(loginSuccess(response.headers.UserID, loginData.email, response.headers.Authorization));
-                dispatch(checkLoginTimeout(lifespan));
+                dispatch(checkLoginTimeout(lifetime));
             })
             .catch(error => {
-                // TODO: add response codes
-                // also need to change this if the Tunestumbler response turns out to be different
-                // can check the API of the error handler that is used
-                console.log(error);
-                // dispatch(loginFail(error.response.data.timestamp, error.response.data.message));
+                error = Object.assign({}, error).response.data;
+                dispatch(loginFail(error.timestamp, error.message));
             });
     };
 };
@@ -88,16 +82,16 @@ export const loginCheckState = () => {
     return (dispatch) => {
         const userId = localStorage.getItem('userId');
         const email = localStorage.getItem('email');
-        const token = localStorage.getItem('token');
-        if (!userId && !email && !token) {
+        const loginToken = localStorage.getItem('loginToken');
+        if (!userId && !email && !loginToken) {
             dispatch(logout());
         } else {
             const expirationDate = new Date(localStorage.getItem('expirationDate'));
             if (expirationDate <= new Date()) {
                 dispatch(logout());
             } else {
-                dispatch(loginSuccess(userId, email, token));
-                checkLoginTimeout(Number(localStorage.getItem('lifespan')));
+                dispatch(loginSuccess(userId, email, loginToken));
+                checkLoginTimeout(Number(localStorage.getItem('lifetime')));
             }
         }
     };

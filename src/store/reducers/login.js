@@ -4,7 +4,7 @@ import { updateObject } from '../utility';
 const initialState = {
     userId: null,
     email: null,
-    token: null,
+    loginToken: null,
     timestamp: null,
     message: null,
     loading: false
@@ -22,7 +22,7 @@ const loginSuccess = (state, action) => {
     return updateObject(state, {
         userId: action.userId,
         email: action.email,
-        token: action.token,
+        loginToken: action.loginToken,
         timestamp: null,
         message: null,
         loading: false
@@ -41,7 +41,7 @@ const loginLogout = (state) => {
     return updateObject(state, {
         userId: null,
         email: null,
-        token: null
+        loginToken: null
     });
 };
 
