@@ -2,6 +2,12 @@ import axios from 'axios';
 
 import * as actionTypes from './actionTypes';
 
+export const signupReset = () => {
+    return {
+        type: actionTypes.SIGNUP_RESET
+    };
+};
+
 export const signupStart = () => {
     return {
         type: actionTypes.SIGNUP_START
@@ -35,15 +41,16 @@ export const signup = (email, password, shouldSignup) => {
             'Accept': 'application/json'
         };
 
-        // const url = 'http://localhost:8080/tunestumbler-wrapper-for-reddit/users';
+        const url = 'http://localhost:8080/tunestumbler-wrapper-for-reddit/users';
+        // const url = 'http://ec2-54-183-128-17.us-west-1.compute.amazonaws.com:8080/tunestumbler-wrapper-for-reddit/users';
         // const url = 'https://jsonplaceholder.typicode.com/posts';
         // this works with the jsonplaceholder url
         // but need to configure CORS for Tunestumbler API
-        const url = 'https://jsonplaceholder.typicode.com/posts';
         axios.post(url, signupData, {headers})
             .then(response => {
+                console.log(response);
                 dispatch(signupSuccess());
-                // redirect to the login page
+                dispatch(signupReset());
             })
             .catch(error => {
                 // TODO: add response codes
