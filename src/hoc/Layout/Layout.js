@@ -11,7 +11,8 @@ class Layout extends Component {
         return (
             <Auxiliary>
                 <Toolbar 
-                    isLoggedIn={this.props.isLoggedIn} />
+                    isLoggedIn={this.props.isLoggedIn}
+                    isConnected={this.props.isConnected} />
                 <main className={classes.Content}>
                     {this.props.children}
                 </main>
@@ -22,7 +23,8 @@ class Layout extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        isLoggedIn: state.login.loginToken !== null
+        isLoggedIn: state.login.loginToken !== null,
+        isConnected: state.connect.isConnected
     };
 };
 

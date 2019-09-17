@@ -7,7 +7,8 @@ const toolbar = (props) => (
     <header className={classes.Toolbar}>
         <nav>
             <NavigationItems 
-                isLoggedIn={props.isLoggedIn} />
+                isLoggedIn={props.isLoggedIn}
+                isConnected={props.isConnected} />
         </nav>
     </header>
 );
