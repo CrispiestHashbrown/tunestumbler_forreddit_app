@@ -7,3 +7,13 @@ export {
     logout,
     loginCheckState
 } from './login';
+
+export {
+    connectSetParams,
+    connectHandlerStart,
+    disconnect,
+    connect,
+    connectHandler,
+    refreshToken,
+    connectCheckState
+} from './connect';

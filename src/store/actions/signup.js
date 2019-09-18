@@ -43,14 +43,13 @@ export const signup = (email, password) => {
 
         const url = 'http://localhost:8080/tunestumbler-wrapper-for-reddit/users';
         // const url = 'http://ec2-54-183-128-17.us-west-1.compute.amazonaws.com:8080/tunestumbler-wrapper-for-reddit/users';
-        // const url = 'https://jsonplaceholder.typicode.com/posts';
         axios.post(url, signupData, {headers})
             .then(response => {
                 dispatch(signupSuccess());
                 dispatch(signupReset());
             })
             .catch(error => {
-                error = Object.assign({}, error).response.data;
+                error = error.response.data;
                 dispatch(signupFail(error.timestamp, error.message));
             });
     };

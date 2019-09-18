@@ -3,7 +3,6 @@ import { updateObject } from '../utility';
 
 const initialState = {
     userId: null,
-    email: null,
     loginToken: null,
     timestamp: null,
     message: null,
@@ -21,7 +20,6 @@ const loginStart = (state) => {
 const loginSuccess = (state, action) => {
     return updateObject(state, {
         userId: action.userId,
-        email: action.email,
         loginToken: action.loginToken,
         timestamp: null,
         message: null,
@@ -31,6 +29,8 @@ const loginSuccess = (state, action) => {
 
 const loginFail = (state, action) => {
     return updateObject(state, {
+        userId: null,
+        loginToken: null,
         timestamp: action.timestamp,
         message: action.message,
         loading: false
@@ -40,21 +40,22 @@ const loginFail = (state, action) => {
 const loginLogout = (state) => {
     return updateObject(state, {
         userId: null,
-        email: null,
-        loginToken: null
+        loginToken: null,
+        timestamp: null,
+        message: null
     });
 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.LOGIN_START:
-            return loginStart(state, action);
+            return loginStart(state);
         case actionTypes.LOGIN_SUCCESS:
             return loginSuccess(state, action);
         case actionTypes.LOGIN_FAIL:
             return loginFail(state, action);
         case actionTypes.LOGIN_LOGOUT:
-            return loginLogout(state, action);
+            return loginLogout(state);
         default:
             return state;
     }

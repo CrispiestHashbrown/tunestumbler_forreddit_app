@@ -11,6 +11,17 @@ import * as actions from './store/actions/index';
 
 class App extends Component {
   componentDidMount () {
+    const query = new URLSearchParams(this.props.location.search);
+    const stateString = query.get(`state`);
+    const code = query.get(`code`);
+    if ((stateString !== null) && (code !== null)) {
+      localStorage.setItem('stateString', stateString);
+      localStorage.setItem('code', code);
+    }
+
+    this.props.onConnectHandlerStart();
+
+    this.props.onTryAutoConnect();
     this.props.onTryAutoSignup();
   }
 
@@ -23,10 +34,20 @@ class App extends Component {
       </Switch>
     );
 
-    if (this.props.isLoggedIn) {
+    if (this.props.isLoggedIn && !this.props.isConnected) {
       routes = (
         <Switch>
           <Route path="/connect" component={Connect} />
+          {/* <Route path="/settings" component={Settings} /> */}
+          <Route path="/logout" component={Logout} />
+          <Redirect to="/connect" />
+        </Switch>
+      );
+    }
+    
+    if (this.props.isLoggedIn && this.props.isConnected) {
+      routes = (
+        <Switch>
           {/* <Route path="/filters" component={Filters} />
           <Route path="/results" component={Results} />
           <Route path="/settings" component={Settings} /> */}
@@ -48,12 +69,15 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isLoggedIn: state.login.loginToken !== null
+    isLoggedIn: state.login.loginToken !== null,
+    isConnected: state.connect.isConnected
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onConnectHandlerStart: () => dispatch(actions.connectHandlerStart()),
+    onTryAutoConnect: () => dispatch(actions.connectCheckState()),
     onTryAutoSignup: () => dispatch(actions.loginCheckState())
   };
 };
