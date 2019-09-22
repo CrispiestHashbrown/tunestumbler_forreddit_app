@@ -11,13 +11,15 @@ import registerServiceWorker from './registerServiceWorker';
 import signupReducer from './store/reducers/signup';
 import loginReducer from './store/reducers/login';
 import connectReducer from './store/reducers/connect';
+import filtersReducer from './store/reducers/filters';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
     signup: signupReducer,
     login: loginReducer,
-    connect: connectReducer
+    connect: connectReducer,
+    filters: filtersReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(
