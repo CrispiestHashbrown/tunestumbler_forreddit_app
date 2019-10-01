@@ -14,6 +14,7 @@ class Login extends Component {
     state = {
         controls: {
             email: {
+                elementDisplay: 'block',
                 elementType: 'input',
                 elementConfig: {
                     type: 'email',
@@ -28,6 +29,7 @@ class Login extends Component {
                 touched: false
             },
             password: {
+                elementDisplay: 'block',
                 elementType: 'input',
                 elementConfig: {
                     type: 'password',
@@ -108,6 +110,7 @@ class Login extends Component {
         let form = formElementsArray.map(formElement => (
             <Input 
                 key={formElement.id}
+                elementDisplay={formElement.config.elementDisplay}
                 elementType={formElement.config.elementType}
                 elementConfig={formElement.config.elementConfig}
                 value={formElement.config.value}

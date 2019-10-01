@@ -10,20 +10,41 @@
     margin-bottom: 8px;
 }
 
-.InputElement {
+.BlockInputElement {
+    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
     outline: none;
     border: 1px solid #ccc;
     background-color: white;
     font: inherit;
     padding: 6px 10px;
     display: block;
-    width: 100%;
+    width: 90%;
+    max-width: 250px;
     box-sizing: border-box;
 }
 
 .InputElement:focus {
     outline: none;
     background-color: #ccc;
+}
+
+.RowInputElement {
+    outline: none;
+    border: 1px solid #ccc;
+    background-color: white;
+    font: inherit;
+    padding: 6px 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .Invalid {
