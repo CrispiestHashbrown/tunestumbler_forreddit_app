@@ -8,6 +8,7 @@ import Login from './containers/Login/Login';
 import Logout from './containers/Logout/Logout';
 import Connect from './containers/Connect/Connect';
 import Filters from './containers/Filters/Filters';
+import Results from './containers/Results/Results';
 import * as actions from './store/actions/index';
 
 class App extends Component {
@@ -50,11 +51,11 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/filters" component={Filters} />
-          {/* <Route path="/new" component={Results} />
-          <Route path="/best" component={Results} />
-          <Route path="/hot" component={Results} />
-          <Route path="/top" component={Results} />
-          <Route path="/settings" component={Settings} /> */}
+          <Route path="/results/new" component={Results} />
+          <Route path="/results/best" component={Results} />
+          <Route path="/results/hot" component={Results} />
+          <Route path="/results/top" component={Results} />
+          {/* <Route path="/settings" component={Settings} /> */}
           <Route path="/logout" component={Logout} />
           <Redirect to="/filters" />
         </Switch>

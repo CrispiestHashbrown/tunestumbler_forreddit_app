@@ -4,7 +4,7 @@ import { updateObject } from '../utility';
 const initialState = {
     didGetSubreddits: false,
     didGetFilters: false,
-    didFiltersUpdate: false,
+    didUpdateFilters: false,
     didCreateFilters: false,
     timestamp: null,
     message: null,
@@ -67,7 +67,7 @@ const filtersGetFail = (state, action) => {
 
 const filtersUpdateStart = (state) => {
     return updateObject(state, {
-        didFiltersUpdate: false,
+        didUpdateFilters: false,
         timestamp: null,
         message: null,
         loading: true
@@ -76,7 +76,7 @@ const filtersUpdateStart = (state) => {
 
 const filtersUpdateSuccess = (state) => {
     return updateObject(state, {
-        didFiltersUpdate: true,
+        didUpdateFilters: true,
         timestamp: null,
         message: null,
         loading: false
@@ -85,7 +85,7 @@ const filtersUpdateSuccess = (state) => {
 
 const filtersUpdateFail = (state, action) => {
     return updateObject(state, {
-        didFiltersUpdate: false,
+        didUpdateFilters: false,
         timestamp: action.timestamp,
         message: action.message,
         loading: false

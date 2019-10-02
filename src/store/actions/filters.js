@@ -94,7 +94,8 @@ export const updateFilters = (filters) => {
 
         const userId = localStorage.getItem('userId');
         const uri = `/filters/${userId}`;
-        axios.put(uri, filters, {headers})
+        
+        axios.put(uri, {filters: filters}, {headers})
             .then(response => {
                 dispatch(filtersUpdateSuccess());
             })
@@ -117,7 +118,7 @@ export const createFilters = (filters) => {
 
         const userId = localStorage.getItem('userId');
         const uri = `/filters/${userId}`;
-        axios.post(uri, filters, {headers})
+        axios.post(uri, {filters: filters}, {headers})
             .then(response => {
                 dispatch(filtersCreateSuccess());
             })

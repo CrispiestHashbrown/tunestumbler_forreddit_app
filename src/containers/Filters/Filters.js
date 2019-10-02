@@ -218,8 +218,10 @@ class Filters extends Component {
                 touched: false
             }
         },
-        subreddits: ['<No subreddits>'],
-        filters: []
+        subreddits: [],
+        filters: [],
+        shouldUpdateFilters: false,
+        shouldCreateFilters: false
     }
 
     getSubreddits () {
@@ -276,6 +278,8 @@ class Filters extends Component {
                 for (let index in filtersResponse) {
                     let initialControls = cloneDeep(this.initialControlValues);
                     initialControls.subreddit.value = filtersResponse[index].subreddit;
+                    initialControls.subreddit.valid = 
+                        this.checkValidity(filtersResponse[index].subreddit, initialControls.subreddit.validation);
                     initialControls.minScore.value = filtersResponse[index].minScore;
                     initialControls.hideByKeyword.value = filtersResponse[index].hideByKeyword;
                     initialControls.showByKeyword.value = filtersResponse[index].showByKeyword;
@@ -338,17 +342,79 @@ class Filters extends Component {
         });
     }
 
-    sendUpdatedFiltersToApi () {
-        // if (subreddit !== null) {
-        //     add to array
-        // }
+    sendUpdatedFiltersToApi() {
+        let filtersToUpdate = [];
+        if (this.state.subreddits.length > 0) {
+            let stateFiltersToUpdate = cloneDeep(this.state.filters)
+                .filter((filter) => {
+                    return filter.new === false
+                });
+
+            for (let filter in stateFiltersToUpdate) {
+                filtersToUpdate.push({
+                    filtersId: stateFiltersToUpdate[filter].id,
+                    userId: localStorage.getItem('userId'),
+                    multireddit: null,
+                    subreddit: stateFiltersToUpdate[filter].controls.subreddit.value,
+                    minScore: stateFiltersToUpdate[filter].controls.minScore.value,
+                    priority: 0,
+                    allowNSFWFlag: false,
+                    hideByKeyword: stateFiltersToUpdate[filter].controls.hideByKeyword.value,
+                    showByKeyword: stateFiltersToUpdate[filter].controls.showByKeyword.value,
+                    hideByDomain: stateFiltersToUpdate[filter].controls.hideByDomain.value,
+                    showByDomain: stateFiltersToUpdate[filter].controls.showByDomain.value
+                });
+            }
+        }
+
+        if (filtersToUpdate.length > 0) {
+            this.setState({
+                shouldUpdateFilters: true
+            });
+
+            this.props.onUpdateFilters(filtersToUpdate);
+        }
     }
 
-    sendNewFiltersToApi () {
-        // if (subreddit !== null) {
-        //     add to array
-        // }
+    sendNewFiltersToApi() {
+        let filtersToCreate = [];
+        if (this.state.subreddits.length > 0) {
+            let stateFiltersToCreate = cloneDeep(this.state.filters)
+                .filter((filter) => {
+                    return filter.new === true
+                });
+
+            for (let filter in stateFiltersToCreate) {
+                filtersToCreate.push({
+                    filtersId: null,
+                    userId: localStorage.getItem('userId'),
+                    multireddit: null,
+                    subreddit: stateFiltersToCreate[filter].controls.subreddit.value,
+                    minScore: stateFiltersToCreate[filter].controls.minScore.value,
+                    priority: 0,
+                    allowNSFWFlag: false,
+                    hideByKeyword: stateFiltersToCreate[filter].controls.hideByKeyword.value,
+                    showByKeyword: stateFiltersToCreate[filter].controls.showByKeyword.value,
+                    hideByDomain: stateFiltersToCreate[filter].controls.hideByDomain.value,
+                    showByDomain: stateFiltersToCreate[filter].controls.showByDomain.value
+                });
+            }
+        }
+
+        if (filtersToCreate.length > 0) {
+            this.setState({
+                shouldCreateFilters: true
+            });
+            
+            this.props.onCreateFilters(filtersToCreate);
+        }
     }
+
+    searchHandler = (event) => {
+        event.preventDefault();
+        this.sendUpdatedFiltersToApi();
+        this.sendNewFiltersToApi();
+    } 
 
     checkValidity(value, rules) {
         let isValid = true;
@@ -410,12 +476,6 @@ class Filters extends Component {
         }
     }
 
-    submitHandler = (event, filtersToUpdate, filtersToCreate) => {
-        event.preventDefault();
-        this.props.onUpdateFilters(filtersToUpdate);
-        this.props.onCreateFilters(filtersToCreate);
-    } 
-
     render () {
         let controlsForm = (elementsArray, keyPrefix, shouldEnable) => {
             return (
@@ -474,7 +534,7 @@ class Filters extends Component {
                 }
 
                 filtersFormArray.push(
-                    <Auxiliary>
+                    <Auxiliary key={uuid.v4()}>
                         <Auxiliary>
                             {controlsForm(filterElementsArray, filterElementsArray[0].filtersId, this.props.didGetFilters)}
                         </Auxiliary>
@@ -499,7 +559,7 @@ class Filters extends Component {
         }
 
         let filtersRedirect = null;
-        if (this.props.didFiltersUpdate && this.props.didCreateFilters) {
+        if ((this.state.shouldUpdateFilters && this.props.didUpdateFilters) || (this.state.shouldCreateFilters && this.props.didCreateFilters)) {
             filtersRedirect = <Redirect to="/results/new" />
         }
 
@@ -509,7 +569,10 @@ class Filters extends Component {
                 {errorMessage}
                 {createFiltersForm}
                 {filtersForm}
-                <Button key='search' buttonType="Successful">Search</Button>
+                <Button 
+                    key='search' 
+                    buttonType="Successful" 
+                    clicked={(event) => this.searchHandler(event)}>Search</Button>
             </Auxiliary>
         );
     }
@@ -519,7 +582,7 @@ const mapStateToProps = (state) => {
     return {
         didGetSubreddits: state.filters.didGetSubreddits,
         didGetFilters: state.filters.didGetFilters,
-        didFiltersUpdate: state.filters.didFiltersUpdate,
+        didUpdateFilters: state.filters.didUpdateFilters,
         didCreateFilters: state.filters.didCreateFilters,
         timestamp: state.filters.timestamp,
         message: state.filters.message,
