@@ -3,13 +3,23 @@ import React from 'react';
 import classes from './Input.css';
 
 const input = (props) => {
-    let inputElement = null;
-    const inputClasses = [classes.inputElement];
+    let inputClasses = [];
+    switch (props.elementDisplay) {
+        case('block'):
+            inputClasses = [classes.BlockInputElement];
+            break;
+        case('row'):
+            inputClasses = [classes.RowInputElement];
+            break;
+        default:
+            inputClasses = [];
+    }    
 
     if (props.invalid && props.shouldValidate && props.touched) {
         inputClasses.push(classes.Invalid);
     }
 
+    let inputElement = null;
     switch (props.elementType) {
         case('input'):
             inputElement = <input 
@@ -26,18 +36,16 @@ const input = (props) => {
                 onChange={props.changed} />;
             break;
         case('select'):
-            inputElement = (
-                <select 
+            inputElement = <select 
                     className={inputClasses.join(' ')}
                     value={props.value}
                     onChange={props.changed}>
-                    {props.elementConfig.options.map(option => (
-                        <option key={option.value} value={option.value}>
-                            {option.displayValue}
+                    {props.options.map(option => (
+                        <option key={option.key} value={option.value}>
+                            {option.value}
                         </option>
                     ))}
-                </select>
-            );
+                </select>;
             break;
         default:
             inputElement = <input 
