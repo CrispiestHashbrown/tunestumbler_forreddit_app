@@ -28,3 +28,12 @@ export {
     updateFilters,
     createFilters
 } from './filters';
+
+export {
+    resultsGetResultsStart,
+    resultsGetResultsSuccess,
+    resultsGetResultsFail,
+    resultsGetNextResultsStart,
+    resultsGetNextResultsSuccess,
+    resultsGetNextResultsFail
+} from './results';
