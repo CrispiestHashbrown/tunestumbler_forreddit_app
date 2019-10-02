@@ -17,3 +17,14 @@ export {
     refreshToken,
     connectCheckState
 } from './connect';
+
+export {
+    filtersGetSubredditsStart,
+    filtersGetSubredditsSuccess,
+    filtersGetSubredditsFail,
+    filtersGetStart,
+    filtersGetSuccess,
+    filtersGetFail,
+    updateFilters,
+    createFilters
+} from './filters';
