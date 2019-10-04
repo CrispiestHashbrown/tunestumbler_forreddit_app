@@ -3,7 +3,10 @@ import { updateObject } from '../utility';
 
 const initialState = {
     didGetResults: false,
+    nextUri: '',
+    afterId: '',
     didGetNextResults: false,
+    results: [],
     timestamp: null,
     message: null,
     loading: false
@@ -12,15 +15,21 @@ const initialState = {
 const resultsGetResultsStart = (state) => {
     return updateObject(state, {
         didGetResults: false,
+        nextUri: '',
+        afterId: '',
+        results: [],
         timestamp: null,
         message: null,
         loading: true
     });
 };
 
-const resultsGetResultsSuccess = (state) => {
+const resultsGetResultsSuccess = (state, action) => {
     return updateObject(state, {
         didGetResults: true,
+        nextUri: action.nextUri,
+        afterId: action.afterId,
+        results: action.results,
         timestamp: null,
         message: null,
         loading: false
@@ -45,9 +54,11 @@ const resultsGetNextResultsStart = (state) => {
     });
 };
 
-const resultsGetNextResultsSuccess = (state) => {
+const resultsGetNextResultsSuccess = (state, action) => {
     return updateObject(state, {
+        afterId: action.afterId,
         didGetNextResults: true,
+        results: action.updatedResults,
         timestamp: null,
         message: null,
         loading: false
@@ -56,6 +67,7 @@ const resultsGetNextResultsSuccess = (state) => {
 
 const resultsGetNextResultsFail = (state, action) => {
     return updateObject(state, {
+        afterId: '',
         didGetNextResults: false,
         timestamp: action.timestamp,
         message: action.message,
@@ -68,13 +80,13 @@ const reducer = (state = initialState, action) => {
         case actionTypes.RESULTS_GET_RESULTS_START:
             return resultsGetResultsStart(state);
         case actionTypes.RESULTS_GET_RESULTS_SUCCESS:
-            return resultsGetResultsSuccess(state);
+            return resultsGetResultsSuccess(state, action);
         case actionTypes.RESULTS_GET_RESULTS_FAIL:
             return resultsGetResultsFail(state, action);
         case actionTypes.RESULTS_GET_NEXT_RESULTS_START:
             return resultsGetNextResultsStart(state);
         case actionTypes.RESULTS_GET_NEXT_RESULTS_SUCCESS:
-            return resultsGetNextResultsSuccess(state);
+            return resultsGetNextResultsSuccess(state, action);
         case actionTypes.RESULTS_GET_NEXT_RESULTS_FAIL:
             return resultsGetNextResultsFail(state, action);
         default:

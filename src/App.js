@@ -51,10 +51,10 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/filters" component={Filters} />
-          <Route path="/results/new" component={Results} />
-          <Route path="/results/best" component={Results} />
-          <Route path="/results/hot" component={Results} />
-          <Route path="/results/top" component={Results} />
+          <Route path="/new" component={Results} />
+          <Route path="/best" component={Results} />
+          <Route path="/hot" component={Results} />
+          <Route path="/top" component={Results} />
           {/* <Route path="/settings" component={Settings} /> */}
           <Route path="/logout" component={Logout} />
           <Redirect to="/filters" />
