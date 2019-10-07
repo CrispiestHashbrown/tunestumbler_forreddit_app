@@ -8,7 +8,10 @@ import Login from './containers/Login/Login';
 import Logout from './containers/Logout/Logout';
 import Connect from './containers/Connect/Connect';
 import Filters from './containers/Filters/Filters';
-import Results from './containers/Results/Results';
+import NewResults from './containers/Results/NewResults';
+import BestResults from './containers/Results/BestResults';
+import HotResults from './containers/Results/HotResults';
+import TopResults from './containers/Results/TopResults';
 import * as actions from './store/actions/index';
 
 class App extends Component {
@@ -51,10 +54,10 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/filters" component={Filters} />
-          <Route path="/new" component={Results} />
-          <Route path="/best" component={Results} />
-          <Route path="/hot" component={Results} />
-          <Route path="/top" component={Results} />
+          <Route path="/new" component={NewResults} />
+          <Route path="/best" component={BestResults} />
+          <Route path="/hot" component={HotResults} />
+          <Route path="/top" component={TopResults} />
           {/* <Route path="/settings" component={Settings} /> */}
           <Route path="/logout" component={Logout} />
           <Redirect to="/filters" />

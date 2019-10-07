@@ -1,5 +1,5 @@
-import * as actionTypes from '../actions/actionTypes';
-import { updateObject } from '../utility';
+import * as actionTypes from '../../actions/actionTypes';
+import { updateObject } from '../../utility';
 
 const initialState = {
     didGetResults: false,
@@ -77,17 +77,17 @@ const resultsGetNextResultsFail = (state, action) => {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.RESULTS_GET_RESULTS_START:
+        case actionTypes.HOT_RESULTS_GET_RESULTS_START:
             return resultsGetResultsStart(state);
-        case actionTypes.RESULTS_GET_RESULTS_SUCCESS:
+        case actionTypes.HOT_RESULTS_GET_RESULTS_SUCCESS:
             return resultsGetResultsSuccess(state, action);
-        case actionTypes.RESULTS_GET_RESULTS_FAIL:
+        case actionTypes.HOT_RESULTS_GET_RESULTS_FAIL:
             return resultsGetResultsFail(state, action);
-        case actionTypes.RESULTS_GET_NEXT_RESULTS_START:
+        case actionTypes.HOT_RESULTS_GET_NEXT_RESULTS_START:
             return resultsGetNextResultsStart(state);
-        case actionTypes.RESULTS_GET_NEXT_RESULTS_SUCCESS:
+        case actionTypes.HOT_RESULTS_GET_NEXT_RESULTS_SUCCESS:
             return resultsGetNextResultsSuccess(state, action);
-        case actionTypes.RESULTS_GET_NEXT_RESULTS_FAIL:
+        case actionTypes.HOT_RESULTS_GET_NEXT_RESULTS_FAIL:
             return resultsGetNextResultsFail(state, action);
         default:
             return state;

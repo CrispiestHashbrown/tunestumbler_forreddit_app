@@ -1,16 +1,16 @@
 import { cloneDeep } from 'lodash';
-import * as actionTypes from './actionTypes';
-import axios from '../../axios-urls/axios-tunestumbler';
+import * as actionTypes from '../actionTypes';
+import axios from '../../../axios-urls/axios-tunestumbler';
 
 export const resultsGetResultsStart = () => {
     return {
-        type: actionTypes.RESULTS_GET_RESULTS_START
+        type: actionTypes.HOT_RESULTS_GET_RESULTS_START
     };
 };
 
 export const resultsGetResultsSuccess = (nextUri, afterId, results) => {
     return {
-        type: actionTypes.RESULTS_GET_RESULTS_SUCCESS,
+        type: actionTypes.HOT_RESULTS_GET_RESULTS_SUCCESS,
         nextUri: nextUri,
         afterId: afterId,
         results: results
@@ -19,7 +19,7 @@ export const resultsGetResultsSuccess = (nextUri, afterId, results) => {
 
 export const resultsGetResultsFail = (timestamp, message) => {
     return {
-        type: actionTypes.RESULTS_GET_RESULTS_FAIL,
+        type: actionTypes.HOT_RESULTS_GET_RESULTS_FAIL,
         timestamp: timestamp,
         message: message
     };
@@ -27,13 +27,13 @@ export const resultsGetResultsFail = (timestamp, message) => {
 
 export const resultsGetNextResultsStart = () => {
     return {
-        type: actionTypes.RESULTS_GET_NEXT_RESULTS_START
+        type: actionTypes.HOT_RESULTS_GET_NEXT_RESULTS_START
     };
 };
 
 export const resultsGetNextResultsSuccess = (afterId, updatedResults) => {
     return {
-        type: actionTypes.RESULTS_GET_NEXT_RESULTS_SUCCESS,
+        type: actionTypes.HOT_RESULTS_GET_NEXT_RESULTS_SUCCESS,
         afterId: afterId,
         updatedResults: updatedResults
     };
@@ -41,13 +41,13 @@ export const resultsGetNextResultsSuccess = (afterId, updatedResults) => {
 
 export const resultsGetNextResultsFail = (timestamp, message) => {
     return {
-        type: actionTypes.RESULTS_GET_NEXT_RESULTS_FAIL,
+        type: actionTypes.HOT_RESULTS_GET_NEXT_RESULTS_FAIL,
         timestamp: timestamp,
         message: message
     };
 };
 
-export const getResults = (resultsRoute) => {
+export const hotGetResults = () => {
     return (dispatch) => {
         dispatch(resultsGetResultsStart());
 
@@ -58,7 +58,7 @@ export const getResults = (resultsRoute) => {
         };
 
         const userId = localStorage.getItem('userId');
-        const uri = `/results/fetch/${userId}${resultsRoute}`;
+        const uri = `/results/fetch/${userId}/hot`;
 
         axios.get(uri, {headers})
         .then(response => {
@@ -70,11 +70,13 @@ export const getResults = (resultsRoute) => {
                 let result = {};
                 result.id = resultsResponse[index].resultsId;
                 result.subreddit = resultsResponse[index].subreddit;
+                result.url = resultsResponse[index].url;
                 result.title = resultsResponse[index].title;
+                result.permalink = resultsResponse[index].permalink;
                 result.score = resultsResponse[index].score;
                 result.createdUtc = resultsResponse[index].createdUtc;
                 result.domain = resultsResponse[index].domain;
-                result.url = resultsResponse[index].url;
+                result.comments = resultsResponse[index].comments;
                 results.push(result);
             }
 
@@ -87,7 +89,7 @@ export const getResults = (resultsRoute) => {
     };
 };
 
-export const getNextResults = (results, nextUri, afterId) => {
+export const hotGetNextResults = (results, nextUri, afterId) => {
     return (dispatch) => {
         dispatch(resultsGetNextResultsStart());
 
@@ -113,11 +115,13 @@ export const getNextResults = (results, nextUri, afterId) => {
                 let result = {};
                 result.id = resultsResponse[index].resultsId;
                 result.subreddit = resultsResponse[index].subreddit;
+                result.url = resultsResponse[index].url;
                 result.title = resultsResponse[index].title;
+                result.permalink = resultsResponse[index].permalink;
                 result.score = resultsResponse[index].score;
                 result.createdUtc = resultsResponse[index].createdUtc;
                 result.domain = resultsResponse[index].domain;
-                result.url = resultsResponse[index].url;
+                result.comments = resultsResponse[index].comments;
                 updatedResults.push(result);
             }
 
