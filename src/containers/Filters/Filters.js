@@ -116,7 +116,7 @@ class Filters extends Component {
             valid: false,
             touched: false
         }
-    };
+    }
 
     state = {
         controls: {
@@ -259,7 +259,7 @@ class Filters extends Component {
                 error = error.response.data;
                 this.props.onGetSubredditsFail(error.timestamp, error.message);
             });
-    };
+    }
 
     getFilters() {
         this.props.onGetFiltersStart();
@@ -303,7 +303,7 @@ class Filters extends Component {
                 error = error.response.data;
                 this.props.onGetFiltersFail(error.timestamp, error.message);
             });
-    };
+    }
 
     clearControlsHandler = () => {
         const initialControls = cloneDeep(this.initialControlValues);
@@ -560,7 +560,7 @@ class Filters extends Component {
 
         let filtersRedirect = null;
         if ((this.state.shouldUpdateFilters && this.props.didUpdateFilters) || (this.state.shouldCreateFilters && this.props.didCreateFilters)) {
-            filtersRedirect = <Redirect to="/results/new" />
+            filtersRedirect = <Redirect to="/new" />
         }
 
         return (
@@ -572,7 +572,7 @@ class Filters extends Component {
                 <Button 
                     key='search' 
                     buttonType="Successful" 
-                    clicked={(event) => this.searchHandler(event)}>Search</Button>
+                    clicked={(event) => this.searchHandler(event)}>Save and Search</Button>
             </Auxiliary>
         );
     }
