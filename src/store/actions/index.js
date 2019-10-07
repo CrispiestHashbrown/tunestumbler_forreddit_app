@@ -28,3 +28,23 @@ export {
     updateFilters,
     createFilters
 } from './filters';
+
+export {
+    newGetResults,
+    newGetNextResults
+} from './results/newResults';
+
+export {
+    bestGetResults,
+    bestGetNextResults
+} from './results/bestResults';
+
+export {
+    hotGetResults,
+    hotGetNextResults
+} from './results/hotResults';
+
+export {
+    topGetResults,
+    topGetNextResults
+} from './results/topResults';
