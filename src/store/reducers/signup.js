@@ -12,7 +12,7 @@ const signupReset = (state) => {
     return updateObject(state, initialState);
 }
 
-const signupStart = (state, action) => {
+const signupStart = (state) => {
     return updateObject(state, {
         shouldRedirect: false,
         timestamp: null,
@@ -21,7 +21,7 @@ const signupStart = (state, action) => {
     });
 }
 
-const signupSuccess = (state, action) => {
+const signupSuccess = (state) => {
     return updateObject(state, {
         shouldRedirect: true,
         timestamp: null,
@@ -44,9 +44,9 @@ const reducer = (state = initialState, action) => {
         case actionTypes.SIGNUP_RESET:
             return signupReset(state);
         case actionTypes.SIGNUP_START:
-            return signupStart(state, action);
+            return signupStart(state);
         case actionTypes.SIGNUP_SUCCESS:
-            return signupSuccess(state, action);
+            return signupSuccess(state);
         case actionTypes.SIGNUP_FAIL:
             return signupFail(state, action);
         default:
