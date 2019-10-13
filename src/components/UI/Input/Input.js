@@ -41,7 +41,7 @@ const input = (props) => {
                     value={props.value}
                     onChange={props.changed}>
                     {props.options.map(option => (
-                        <option key={option.key} value={option.value}>
+                        <option key={`${props.keyPrefix}${option.key}`} value={option.value}>
                             {option.value}
                         </option>
                     ))}

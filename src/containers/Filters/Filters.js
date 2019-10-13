@@ -483,6 +483,7 @@ class Filters extends Component {
                     {elementsArray.map(controlElement => (
                         <Input 
                             key={`${keyPrefix}${controlElement.id}`}
+                            keyPrefix={keyPrefix}
                             elementDisplay={controlElement.config.elementDisplay}
                             elementType={controlElement.config.elementType}
                             elementConfig={controlElement.config.elementConfig}
@@ -534,7 +535,7 @@ class Filters extends Component {
                 }
 
                 filtersFormArray.push(
-                    <Auxiliary key={uuid.v4()}>
+                    <Auxiliary key={filterElementsArray[0].filtersId}>
                         <Auxiliary>
                             {controlsForm(filterElementsArray, filterElementsArray[0].filtersId, this.props.didGetFilters)}
                         </Auxiliary>
