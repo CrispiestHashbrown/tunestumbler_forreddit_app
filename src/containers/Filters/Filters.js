@@ -29,7 +29,7 @@ class Filters extends Component {
             validation: {
                 required: true,
                 maxLength: 21,
-                canBeNull: false
+                minLength: 1
             },
             valid: false,
             touched: true
@@ -43,11 +43,11 @@ class Filters extends Component {
             },
             value: '',
             validation: {
-                required: true,
+                required: false,
                 isNumeric: true,
                 minValue: 1,
                 maxValue: 99999999,
-                canBeNull: true
+                minLength: 0
             },
             valid: false,
             touched: false
@@ -61,9 +61,9 @@ class Filters extends Component {
             },
             value: '',
             validation: {
-                required: true,
+                required: false,
                 maxLength: 15,
-                canBeNull: true
+                minLength: 0
             },
             valid: false,
             touched: false
@@ -77,9 +77,9 @@ class Filters extends Component {
             },
             value: '',
             validation: {
-                required: true,
+                required: false,
                 maxLength: 50,
-                canBeNull: true
+                minLength: 0
             },
             valid: false,
             touched: false
@@ -93,9 +93,9 @@ class Filters extends Component {
             },
             value: '',
             validation: {
-                required: true,
+                required: false,
                 maxLength: 15,
-                canBeNull: true
+                minLength: 0
             },
             valid: false,
             touched: false
@@ -109,9 +109,9 @@ class Filters extends Component {
             },
             value: '',
             validation: {
-                required: true,
+                required: false,
                 maxLength: 50,
-                canBeNull: true
+                minLength: 0
             },
             valid: false,
             touched: false
@@ -144,7 +144,7 @@ class Filters extends Component {
                 },
                 value: '',
                 validation: {
-                    required: true,
+                    required: false,
                     isNumeric: true,
                     minValue: 1,
                     maxValue: 99999999,
@@ -162,7 +162,7 @@ class Filters extends Component {
                 },
                 value: '',
                 validation: {
-                    required: true,
+                    required: false,
                     maxLength: 15,
                     minLength: 0
                 },
@@ -178,7 +178,7 @@ class Filters extends Component {
                 },
                 value: '',
                 validation: {
-                    required: true,
+                    required: false,
                     maxLength: 50,
                     minLength: 0
                 },
@@ -194,7 +194,7 @@ class Filters extends Component {
                 },
                 value: '',
                 validation: {
-                    required: true,
+                    required: false,
                     maxLength: 15,
                     minLength: 0
                 },
@@ -210,7 +210,7 @@ class Filters extends Component {
                 },
                 value: '',
                 validation: {
-                    required: true,
+                    required: false,
                     maxLength: 50,
                     minLength: 0
                 },
@@ -434,7 +434,7 @@ class Filters extends Component {
             isValid = value.length <= rules.maxLength && isValid;
         }
 
-        if (rules.minValue) {
+        if (rules.minValue && value) {
             isValid = value >= rules.minValue && isValid;
         }
 
