@@ -20,10 +20,10 @@ class Filters extends Component {
 
     initialControlValues = {
         subreddit: {
-            elementDisplay: 'row',
+            elementDisplay: 'normal',
             elementType: 'select',
             elementConfig: {
-                placeholder: ''
+                placeholder: '<subreddit>'
             },
             value: '',
             validation: {
@@ -35,11 +35,11 @@ class Filters extends Component {
             touched: true
         },
         minScore: {
-            elementDisplay: 'row',
+            elementDisplay: 'small',
             elementType: 'input',
             elementConfig: {
                 type: 'number',
-                placeholder: ''
+                placeholder: '<min score>'
             },
             value: '',
             validation: {
@@ -53,11 +53,11 @@ class Filters extends Component {
             touched: false
         },
         hideByDomain: {
-            elementDisplay: 'row',
+            elementDisplay: 'normal',
             elementType: 'input',
             elementConfig: {
                 type: 'text',
-                placeholder: ''
+                placeholder: '<hide by domain>'
             },
             value: '',
             validation: {
@@ -69,11 +69,11 @@ class Filters extends Component {
             touched: false
         },
         hideByKeyword: {
-            elementDisplay: 'row',
+            elementDisplay: 'normal',
             elementType: 'input',
             elementConfig: {
                 type: 'text',
-                placeholder: ''
+                placeholder: '<hide by keyword>'
             },
             value: '',
             validation: {
@@ -85,11 +85,11 @@ class Filters extends Component {
             touched: false
         },
         showByDomain: {
-            elementDisplay: 'row',
+            elementDisplay: 'normal',
             elementType: 'input',
             elementConfig: {
                 type: 'text',
-                placeholder: ''
+                placeholder: '<only show from domain>'
             },
             value: '',
             validation: {
@@ -101,11 +101,11 @@ class Filters extends Component {
             touched: false
         },
         showByKeyword: {
-            elementDisplay: 'row',
+            elementDisplay: 'normal',
             elementType: 'input',
             elementConfig: {
                 type: 'text',
-                placeholder: ''
+                placeholder: '<only show by keyword>'
             },
             value: '',
             validation: {
@@ -121,10 +121,10 @@ class Filters extends Component {
     state = {
         controls: {
             subreddit: {
-                elementDisplay: 'row',
+                elementDisplay: 'normal',
                 elementType: 'select',
                 elementConfig: {
-                    placeholder: ''
+                    placeholder: '<subreddit>'
                 },
                 value: '',
                 validation: {
@@ -136,11 +136,11 @@ class Filters extends Component {
                 touched: true
             },
             minScore: {
-                elementDisplay: 'row',
+                elementDisplay: 'small',
                 elementType: 'input',
                 elementConfig: {
                     type: 'number',
-                    placeholder: ''
+                    placeholder: '<min score>'
                 },
                 value: '',
                 validation: {
@@ -154,11 +154,11 @@ class Filters extends Component {
                 touched: false
             },
             hideByDomain: {
-                elementDisplay: 'row',
+                elementDisplay: 'normal',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: ''
+                    placeholder: '<hide by domain>'
                 },
                 value: '',
                 validation: {
@@ -170,11 +170,11 @@ class Filters extends Component {
                 touched: false
             },
             hideByKeyword: {
-                elementDisplay: 'row',
+                elementDisplay: 'normal',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: ''
+                    placeholder: '<hide by keyword>'
                 },
                 value: '',
                 validation: {
@@ -186,11 +186,11 @@ class Filters extends Component {
                 touched: false
             },
             showByDomain: {
-                elementDisplay: 'row',
+                elementDisplay: 'normal',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: ''
+                    placeholder: '<only show from domain>'
                 },
                 value: '',
                 validation: {
@@ -202,11 +202,11 @@ class Filters extends Component {
                 touched: false
             },
             showByKeyword: {
-                elementDisplay: 'row',
+                elementDisplay: 'normal',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: ''
+                    placeholder: '<only show by keyword>'
                 },
                 value: '',
                 validation: {
@@ -568,11 +568,13 @@ class Filters extends Component {
             <Auxiliary className={classes.Filters}>
                 {filtersRedirect}
                 {errorMessage}
-                {createFiltersForm}
+                {createFiltersForm}                    
+                <hr />
                 {filtersForm}
                 <Button 
                     key='search' 
                     buttonType="Successful" 
+                    classes={[classes.FloatRight].join(' ')}
                     clicked={(event) => this.searchHandler(event)}>Save and Search</Button>
             </Auxiliary>
         );
