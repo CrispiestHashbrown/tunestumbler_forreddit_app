@@ -14,7 +14,7 @@ import HotResults from './containers/Results/HotResults';
 import TopResults from './containers/Results/TopResults';
 import * as actions from './store/actions/index';
 
-class App extends Component {
+export class App extends Component {
   componentDidMount () {
     const query = new URLSearchParams(this.props.location.search);
     const stateString = query.get(`state`);
