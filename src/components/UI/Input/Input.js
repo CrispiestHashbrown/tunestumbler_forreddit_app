@@ -6,10 +6,13 @@ const input = (props) => {
     let inputClasses = [];
     switch (props.elementDisplay) {
         case('block'):
-            inputClasses = [classes.BlockInputElement];
+            inputClasses = [classes.Input];
             break;
-        case('row'):
-            inputClasses = [classes.RowInputElement];
+        case('normal'):
+            inputClasses = [classes.RowNormal];
+            break;
+        case('small'):
+            inputClasses = [classes.RowSmall];
             break;
         default:
             inputClasses = [];
@@ -56,7 +59,7 @@ const input = (props) => {
     }
 
     return (
-        <div className={classes.Input}>
+        <div>
             <label className={classes.Label}>{props.label}</label>
             {inputElement}
         </div>
