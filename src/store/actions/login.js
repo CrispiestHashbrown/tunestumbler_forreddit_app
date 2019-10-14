@@ -60,8 +60,8 @@ export const login = (email, password) => {
         // const url = 'http://ec2-54-183-128-17.us-west-1.compute.amazonaws.com:8080/tunestumbler-wrapper-for-reddit/users/login';
         axios.post(url, loginData, {headers})
             .then(response => {
-                const lifetime = response.headers.lifetime * 1000;
-                const expirationDate = new Date(new Date().getTime() + lifetime);
+                const lifetime = response.headers.lifetime;
+                const expirationDate = new Date(new Date().getTime() + new Date().setTime(lifetime));
                 localStorage.setItem('userId', response.headers.userid);
                 localStorage.setItem('loginToken', response.headers.authorization);
                 localStorage.setItem('expirationDate', expirationDate);
