@@ -58,6 +58,7 @@ class Results extends Component {
 
         return (
             <Auxiliary className={classes.Results}>
+                Results: 
                 {errorMessage}
                 {loading}
                 <InfiniteScroll
