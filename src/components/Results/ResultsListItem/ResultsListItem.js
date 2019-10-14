@@ -7,61 +7,71 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 const materialClasses = makeStyles({
-    card: {
-        minWidth: 150,
-    },
-    floatLeft: {
+    result: {
         float: 'left',
-        marginRight: '5px',
+        padding: '6px !important',
+        "&:last-child": {
+          paddingBottom: '6px !important'
+        }
     },
-    floatInlineStart: {
-        float: 'inline-start',
-    },
-    inline: {
-        display: 'inline-block',
-        margin: 0,
-        overflow: 'hidden'
+    subredditAndDomain: {
+        color: '#7f8385',
+        fontSize: 15
     },
     title: {
-        fontSize: 14,
+        fontSize: 18
+    },
+    noWrap: {
+        display: 'block',
+        overflow: 'hidden'
     },
     score: {
-        fontSize: 20,
-        align: 'center',
-        display: 'inline'
+        color: '#262626',
+        fontSize: 16,
+        float: 'left',
+        align: 'center'
     },
-    pos: {
-        marginBottom: 0,
+    date: {
+        color: '#7f8385',
+        fontSize: 13,
+        marginBottom: 0
     },
     button: {
-        textTransform: 'none'
+        color: '#878a8c',
+        outlineColor: '#e7e7e7',
+        textTransform: 'none',
+        marginBottom: 0
     }
 });
 
 const result = (props) => (
-    <Card key={props.id}>
-        <CardContent className={materialClasses().inline}>
-            <Typography className={materialClasses().score} color='primary'>
-                {props.score} Upvotes
+    <Card key={props.id} className={materialClasses().noWrap}>
+        <CardContent className={materialClasses().result}>
+            <Typography className={materialClasses().score}>
+                {props.score} 
+                <br />
+                Upvotes
             </Typography>
         </CardContent>
-        <CardContent className={materialClasses().inline}>
-            <Typography className={materialClasses().title} color='textSecondary' gutterBottom>
-                ({props.domain})
+        <CardContent className={materialClasses().result}>
+            <Typography className={materialClasses().subredditAndDomain} gutterBottom>
+                [r/{props.subreddit}] ({props.domain})
             </Typography>
-            <Typography variant="h6" component="h2">
+            <Typography component="h2" className={materialClasses().title}>
                 <a 
-                    style={{display: "table-cell"}}
+                    style={{
+                        display: 'table-cell'
+                    }}
                     href={props.titleUrl}
                     target="_blank">{props.title}</a>
             </Typography>
-            <Typography className={materialClasses().pos} color="textSecondary">
+            <Typography className={materialClasses().date}>
                 submitted: {moment.unix(props.date).format(' h:mmA MMMM Do, YYYY')}
             </Typography>
             <Button 
                 target="_blank" 
                 href={props.commentsUrl}
-                className={materialClasses().button}>{props.comments} r/{props.subreddit} comments</Button>
+                className={materialClasses().button}>{props.comments} comments</Button>
         </CardContent>
     </Card>
 );
