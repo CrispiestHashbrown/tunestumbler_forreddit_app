@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../axios-urls/axios-tunestumbler';
 
 import * as actionTypes from './actionTypes';
 
@@ -84,9 +84,8 @@ export const refreshToken = () => {
         };
         
         const userId = localStorage.getItem('userId');
-        const url = `http://localhost:8080/tunestumbler-wrapper-for-reddit/auth/refresh_token/${userId}`;
-        // const url = 'http://ec2-54-183-128-17.us-west-1.compute.amazonaws.com:8080/tunestumbler-wrapper-for-reddit/auth/refresh_token/${userId}`;
-        axios.get(url, {headers})
+        const uri = `/auth/refresh_token/${userId}`;
+        axios.get(uri, {headers})
             .then(response => {
                 const redditLifetime = response.headers['reddit-lifetime'] * 1000;
                 const redditExpiration = new Date(new Date().getTime() + redditLifetime);
@@ -96,9 +95,9 @@ export const refreshToken = () => {
                 dispatch(checkConnectedTimeout(redditLifetime));
             })
             .catch(error => {
-                error = error.response.data;
                 const errorMessage = `Press the Connect button and sign in to Reddit to continue.`;
-                dispatch(connectFail(error.timestamp, errorMessage));
+                const date = new Date();
+                dispatch(connectFail(date.toString(), errorMessage));
             });
     };
 };
@@ -113,9 +112,8 @@ export const connect = () => {
         };
         
         const userId = localStorage.getItem('userId');
-        const url = `http://localhost:8080/tunestumbler-wrapper-for-reddit/auth/connect/${userId}`;
-        // const url = 'http://ec2-54-183-128-17.us-west-1.compute.amazonaws.com:8080/tunestumbler-wrapper-for-reddit/auth/connect/${userId}`;
-        axios.get(url, {headers})
+        const uri = `/auth/connect/${userId}`;
+        axios.get(uri, {headers})
             .then(response => {
                 const authUrl = response.data.authorizationUrl;
                 window.location.href = authUrl;
@@ -135,9 +133,8 @@ export const connectHandler = (stateString, code) => {
             'Accept': 'application/json'
         };
 
-        const url = `http://localhost:8080/tunestumbler-wrapper-for-reddit/auth/handler/?state=${stateString}&code=${code}`;
-        // const url = `http://ec2-54-183-128-17.us-west-1.compute.amazonaws.com:8080/tunestumbler-wrapper-for-reddit/auth/handler/?state=${state}&code=${code}`;
-        axios.get(url, {headers})
+        const uri = `/auth/handler/?state=${stateString}&code=${code}`;
+        axios.get(uri, {headers})
             .then(response => {
                 const headers = Object.assign({}, response).headers;
                 const redditLifetime = headers['reddit-lifetime'] * 1000;

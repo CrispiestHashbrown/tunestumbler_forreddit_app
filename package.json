@@ -109,5 +109,6 @@
   },
   "devDependencies": {
     "webpack-dev-server": "^3.0.0"
-  }
+  },
+  "homepage": "https://tunestumbler.com/login"
 }
