@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../axios-urls/axios-tunestumbler';
 
 import * as actionTypes from './actionTypes';
 
@@ -41,9 +41,8 @@ export const signup = (email, password) => {
             'Accept': 'application/json'
         };
 
-        const url = 'http://localhost:8080/tunestumbler-wrapper-for-reddit/users';
-        // const url = 'http://ec2-54-183-128-17.us-west-1.compute.amazonaws.com:8080/tunestumbler-wrapper-for-reddit/users';
-        axios.post(url, signupData, {headers})
+        const uri = '/users';
+        axios.post(uri, signupData, {headers})
             .then(response => {
                 dispatch(signupSuccess());
                 dispatch(signupReset());
