@@ -4,8 +4,7 @@ import * as actionTypes from '../actions/actionTypes';
 describe('signup reducer', () => {
     const initialState = {
         shouldRedirect: false,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: false
     };
 
@@ -18,8 +17,7 @@ describe('signup reducer', () => {
             type: actionTypes.SIGNUP_SUCCESS
         })).toEqual({
             shouldRedirect: true,
-            timestamp: null,
-            message: null,
+            error: null,
             loading: false
         });
     });
