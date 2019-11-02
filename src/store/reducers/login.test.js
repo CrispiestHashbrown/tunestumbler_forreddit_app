@@ -5,8 +5,7 @@ describe('login reducer', () => {
     const initialState = {
         userId: null,
         loginToken: null,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: false
     };
 
@@ -22,8 +21,7 @@ describe('login reducer', () => {
         })).toEqual({
             userId: 'some-user-id',
             loginToken: 'some-token',
-            timestamp: null,
-            message: null,
+            error: null,
             loading: false
         });
     });
@@ -32,16 +30,14 @@ describe('login reducer', () => {
         expect(reducer({
             userId: 'some-user-id',
             loginToken: 'some-token',
-            timestamp: null,
-            message: null,
+            error: null,
             loading: false
         }, {
             type: actionTypes.LOGIN_LOGOUT
         })).toEqual({
             userId: null,
             loginToken: null,
-            timestamp: null,
-            message: null,
+            error: null,
             loading: false
         });
     });

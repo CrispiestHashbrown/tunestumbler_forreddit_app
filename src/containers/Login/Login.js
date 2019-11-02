@@ -125,14 +125,17 @@ class Login extends Component {
         }
 
         let errorMessage = null;
-
-        if (this.props.timestamp && this.props.message) {
-            errorMessage = (
-                <Auxiliary>
-                    <p>Timestamp: {this.props.timestamp}</p>
-                    <p>Error: {this.props.message}</p>
-                </Auxiliary>
-            );
+        if (this.props.error) {
+            switch(this.props.error.status) {
+                case 403:
+                    errorMessage = `Error: Incorrect email or password.`;
+                    break;
+                    case 500:
+                        errorMessage = `Error: Internal Server Error or Reddit Error. Try again later.`;
+                        break;
+                    default:
+                    errorMessage = `Error: Could not resolve login request. Try again later.`;
+            }
         }
 
         let loginRedirect = null;
@@ -141,11 +144,10 @@ class Login extends Component {
         }
 
         return (
-            <div className={classes.Login}>
+            <div>
                 {loginRedirect}
-                {/* TODO: add error styling */}
                 {errorMessage}
-                <form onSubmit={this.submitHandler}>
+                <form className={classes.Login} onSubmit={this.submitHandler}>
                     {form}
                     <Button buttonType="Successful">Log in</Button>
                 </form>
@@ -158,8 +160,7 @@ const mapStateToProps = (state) => {
     return {
         isLoggedIn: state.login.loginToken !== null,
         loading: state.login.loading,
-        timestamp: state.login.timestamp,
-        message: state.login.message
+        error: state.login.error
     };
 };
 

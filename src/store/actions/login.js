@@ -16,11 +16,10 @@ export const loginSuccess = (userId, loginToken) => {
     };
 };
 
-export const loginFail = (timestamp, message) => {
+export const loginFail = (error) => {
     return {
         type: actionTypes.LOGIN_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -69,8 +68,7 @@ export const login = (email, password) => {
                 dispatch(checkLoginTimeout(lifetime));
             })
             .catch(error => {
-                error = error.response.data;
-                dispatch(loginFail(error.timestamp, error.message));
+                dispatch(loginFail(error.response));
             });
     };
 };

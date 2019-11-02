@@ -5,14 +5,12 @@ const initialState = {
     userId: null,
     loginToken: null,
     timestamp: null,
-    message: null,
-    loading: false
+    error: null
 };
 
 const loginStart = (state) => {
     return updateObject(state, {
-        timestamp: null,
-        message: null,
+        error: null,
         loading: true
     });
 };
@@ -21,8 +19,7 @@ const loginSuccess = (state, action) => {
     return updateObject(state, {
         userId: action.userId,
         loginToken: action.loginToken,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: false
     });
 };
@@ -31,8 +28,7 @@ const loginFail = (state, action) => {
     return updateObject(state, {
         userId: null,
         loginToken: null,
-        timestamp: action.timestamp,
-        message: action.message,
+        error: action.error,
         loading: false
     });
 };
@@ -41,8 +37,7 @@ const loginLogout = (state) => {
     return updateObject(state, {
         userId: null,
         loginToken: null,
-        timestamp: null,
-        message: null
+        error: null
     });
 };
 
