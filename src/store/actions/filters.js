@@ -88,9 +88,7 @@ export const updateFilters = (filters) => {
             'Accept': 'application/json'
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/filters/${userId}`;
-        
+        const uri = `/filters/myfilters`;
         axios.put(uri, {filters: filters}, {headers})
             .then(response => {
                 dispatch(filtersUpdateSuccess());
@@ -111,8 +109,7 @@ export const createFilters = (filters) => {
             'Accept': 'application/json'
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/filters/${userId}`;
+        const uri = `/filters/myfilters`;
         axios.post(uri, {filters: filters}, {headers})
             .then(response => {
                 dispatch(filtersCreateSuccess());

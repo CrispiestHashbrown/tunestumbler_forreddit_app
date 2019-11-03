@@ -232,8 +232,7 @@ class Filters extends Component {
             'Accept': 'application/json'
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/aggregate/${userId}`;
+        const uri = `/aggregate/myaggregate`;
         axios.get(uri, {headers})
             .then(response => {
                 const subredditsResponse = response.data.aggregate;
@@ -268,8 +267,7 @@ class Filters extends Component {
             'Accept': 'application/json'
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/filters/${userId}`;
+        const uri = `/filters/myfilters`;
         axios.get(uri, {headers})
             .then(response => {
                 const filtersResponse = response.data.filters;
@@ -351,7 +349,6 @@ class Filters extends Component {
             for (let filter in stateFiltersToUpdate) {
                 filtersToUpdate.push({
                     filtersId: stateFiltersToUpdate[filter].id,
-                    userId: localStorage.getItem('userId'),
                     multireddit: null,
                     subreddit: stateFiltersToUpdate[filter].controls.subreddit.value,
                     minScore: stateFiltersToUpdate[filter].controls.minScore.value,
@@ -385,7 +382,6 @@ class Filters extends Component {
             for (let filter in stateFiltersToCreate) {
                 filtersToCreate.push({
                     filtersId: null,
-                    userId: localStorage.getItem('userId'),
                     multireddit: null,
                     subreddit: stateFiltersToCreate[filter].controls.subreddit.value,
                     minScore: stateFiltersToCreate[filter].controls.minScore.value,
