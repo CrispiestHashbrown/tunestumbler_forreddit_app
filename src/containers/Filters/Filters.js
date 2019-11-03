@@ -233,7 +233,7 @@ class Filters extends Component {
         };
 
         const userId = localStorage.getItem('userId');
-        const uri = `/aggregate/update/${userId}`;
+        const uri = `/aggregate/${userId}`;
         axios.get(uri, {headers})
             .then(response => {
                 const subredditsResponse = response.data.aggregate;
@@ -256,8 +256,7 @@ class Filters extends Component {
 
             })
             .catch(error => {
-                error = error.response.data;
-                this.props.onGetSubredditsFail(error.timestamp, error.message);
+                this.props.onGetSubredditsFail(error.response);
             });
     }
 
@@ -300,8 +299,7 @@ class Filters extends Component {
                 this.props.onGetFiltersSuccess();
             })
             .catch(error => {
-                error = error.response.data;
-                this.props.onGetFiltersFail(error.timestamp, error.message);
+                this.props.onGetFiltersFail(error.response);
             });
     }
 
@@ -547,16 +545,24 @@ class Filters extends Component {
             }
 
             filtersForm = filtersFormArray;
-        }            
+        }
 
         let errorMessage = null;
-        if (this.props.timestamp && this.props.message) {
-            errorMessage = (
-                <Auxiliary>
-                    <p>Timestamp: {this.props.timestamp}</p>
-                    <p>Error: {this.props.message}</p>
-                </Auxiliary>
-            );
+        if (this.props.error) {
+            switch(this.props.error.status) {
+                case 400:
+                case 401:
+                    errorMessage = `Error: Bad request. Could not save filters.`;
+                    break;
+                case 404:
+                    errorMessage = `Error: No subreddits found on your Reddit account.`;
+                    break;
+                case 500:
+                    errorMessage = `Error: Internal Server Error or Reddit Error. Try again later.`;
+                    break;
+                default:
+                    errorMessage = null;
+            }
         }
 
         let filtersRedirect = null;
@@ -587,8 +593,7 @@ const mapStateToProps = (state) => {
         didGetFilters: state.filters.didGetFilters,
         didUpdateFilters: state.filters.didUpdateFilters,
         didCreateFilters: state.filters.didCreateFilters,
-        timestamp: state.filters.timestamp,
-        message: state.filters.message,
+        error: state.filters.error,
         loading: state.filters.loading
     };
 };
@@ -597,10 +602,10 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onGetSubredditsStart: () => dispatch(actions.filtersGetSubredditsStart()),
         onGetSubredditsSuccess: () => dispatch(actions.filtersGetSubredditsSuccess()),
-        onGetSubredditsFail: (timestamp, message) => dispatch(actions.filtersGetSubredditsFail(timestamp, message)),
+        onGetSubredditsFail: (error) => dispatch(actions.filtersGetSubredditsFail(error)),
         onGetFiltersStart: () => dispatch(actions.filtersGetStart()),
         onGetFiltersSuccess: () => dispatch(actions.filtersGetSuccess()),
-        onGetFiltersFail: (timestamp, message) => dispatch(actions.filtersGetFail(timestamp, message)),
+        onGetFiltersFail: (error) => dispatch(actions.filtersGetFail(error)),
         onUpdateFilters: (filtersToUpdate) => dispatch(actions.updateFilters(filtersToUpdate)),
         onCreateFilters: (filtersToCreate) => dispatch(actions.createFilters(filtersToCreate))
     };
