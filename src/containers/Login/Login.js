@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 import classes from './Login.css';
 import * as actions from '../../store/actions/index';
 
-import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';

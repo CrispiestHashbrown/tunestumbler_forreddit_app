@@ -2,7 +2,6 @@ import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../utility';
 
 const initialState = {
-    userId: null,
     loginToken: null,
     timestamp: null,
     error: null
@@ -17,7 +16,6 @@ const loginStart = (state) => {
 
 const loginSuccess = (state, action) => {
     return updateObject(state, {
-        userId: action.userId,
         loginToken: action.loginToken,
         error: null,
         loading: false
@@ -26,7 +24,6 @@ const loginSuccess = (state, action) => {
 
 const loginFail = (state, action) => {
     return updateObject(state, {
-        userId: null,
         loginToken: null,
         error: action.error,
         loading: false
@@ -35,7 +32,6 @@ const loginFail = (state, action) => {
 
 const loginLogout = (state) => {
     return updateObject(state, {
-        userId: null,
         loginToken: null,
         error: null
     });
