@@ -16,11 +16,10 @@ export const connectSuccess = (redditLifetime, redditExpiration) => {
     };
 };
 
-export const connectFail = (timestamp, message) => {
+export const connectFail = (error) => {
     return {
         type: actionTypes.CONNECT_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -32,11 +31,12 @@ export const connectHandlerStart = () => {
     };
 };
 
-export const connectHandlerFail = () => {
+export const connectHandlerFail = (error) => {
     localStorage.removeItem('stateString');
     localStorage.removeItem('code');
     return {
-        type: actionTypes.CONNECT_HANDLER_FAIL
+        type: actionTypes.CONNECT_HANDLER_FAIL,
+        error: error
     };
 };
 
@@ -95,9 +95,7 @@ export const refreshToken = () => {
                 dispatch(checkConnectedTimeout(redditLifetime));
             })
             .catch(error => {
-                const errorMessage = `Press the Connect button and sign in to Reddit to continue.`;
-                const date = new Date();
-                dispatch(connectFail(date.toString(), errorMessage));
+                dispatch(connectFail(error.response));
             });
     };
 };
@@ -119,9 +117,7 @@ export const connect = () => {
                 window.location.href = authUrl;
             })
             .catch(error => {
-                const timestamp = new Date();
-                const errorMessage = `Press the Connect button and sign in to Reddit to continue.`;
-                dispatch(connectFail(timestamp, errorMessage));
+                dispatch(connectFail(error.response));
             });
     };
 };
@@ -145,9 +141,8 @@ export const connectHandler = (stateString, code) => {
                 dispatch(checkConnectedTimeout(redditLifetime));
             })
             .catch(error => {
-                error = error.response.data;
                 dispatch(disconnect());
-                dispatch(connectHandlerFail(error.timestamp, error.message));
+                dispatch(connectHandlerFail(error.response));
             });
     };
 };
