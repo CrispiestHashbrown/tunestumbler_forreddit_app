@@ -83,8 +83,7 @@ export const refreshToken = () => {
             'Accept': 'application/json'
         };
         
-        const userId = localStorage.getItem('userId');
-        const uri = `/auth/refresh_token/${userId}`;
+        const uri = `/auth/refresh_token`;
         axios.get(uri, {headers})
             .then(response => {
                 const redditLifetime = response.headers['reddit-lifetime'] * 1000;
@@ -109,8 +108,7 @@ export const connect = () => {
             'Accept': 'application/json'
         };
         
-        const userId = localStorage.getItem('userId');
-        const uri = `/auth/connect/${userId}`;
+        const uri = `/auth/connect`;
         axios.get(uri, {headers})
             .then(response => {
                 const authUrl = response.data.authorizationUrl;
