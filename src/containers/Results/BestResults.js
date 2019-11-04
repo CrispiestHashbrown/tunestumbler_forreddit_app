@@ -46,7 +46,7 @@ class Results extends Component {
             switch(this.props.error.status) {
                 case 400:
                 case 401:
-                    errorMessage = `Error: Bad request. Could not get results.`;
+                    errorMessage = `Sorry, no results found. Try adjusting your filters.`;
                     break;
                 case 404:
                     errorMessage = `Error: No results found. Make sure you set your filters.`;
