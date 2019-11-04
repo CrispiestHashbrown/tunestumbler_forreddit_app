@@ -2,6 +2,18 @@ import axios from '../../axios-urls/axios-tunestumbler';
 
 import * as actionTypes from './actionTypes';
 
+export const filtersUpdateReset = () => {
+    return {
+        type: actionTypes.FILTERS_UPDATE_RESET
+    }
+};
+
+export const filtersCreateReset = () => {
+    return {
+        type: actionTypes.FILTERS_CREATE_RESET
+    }
+};
+
 export const filtersGetSubredditsStart = () => {
     return {
         type: actionTypes.FILTERS_GET_SUBREDDITS_START
@@ -117,5 +129,12 @@ export const createFilters = (filters) => {
             .catch(error => {
                 dispatch(filtersCreateFail(error.response));
             });
+    };
+};
+
+export const resetFiltersState = () => {
+    return (dispatch) => {
+        dispatch(filtersUpdateReset());
+        dispatch(filtersCreateReset());
     };
 };

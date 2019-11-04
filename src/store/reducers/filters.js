@@ -10,6 +10,14 @@ const initialState = {
     loading: false
 };
 
+const filtersUpdateReset = (state) => {
+    return updateObject(state, initialState);
+}
+
+const filtersCreateReset = (state) => {
+    return updateObject(state, initialState);
+}
+
 const filtersGetSubredditsStart = (state) => {
     return updateObject(state, {
         didGetSubreddits: false,
@@ -108,6 +116,10 @@ const filtersCreateFail = (state, action) => {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case actionTypes.FILTERS_UPDATE_RESET:
+            return filtersUpdateReset(state);
+        case actionTypes.FILTERS_CREATE_RESET:
+            return filtersCreateReset(state);
         case actionTypes.FILTERS_GET_SUBREDDITS_START:
             return filtersGetSubredditsStart(state);
         case actionTypes.FILTERS_GET_SUBREDDITS_SUCCESS:
