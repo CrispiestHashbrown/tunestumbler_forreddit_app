@@ -55,9 +55,7 @@ export const hotGetResults = () => {
             'Accept': 'application/json'
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/results/fetch/${userId}/hot`;
-
+        const uri = `/results/fetch/myresults/hot`;
         axios.get(uri, {headers})
         .then(response => {
             const resultsResponse = response.data.results;
@@ -101,9 +99,7 @@ export const hotGetNextResults = (results, nextUri, afterId) => {
             'afterId': afterId
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/results/fetch/next/${userId}`;
-
+        const uri = `/results/fetch/next`;
         axios.post(uri, postBody, {headers})
         .then(response => {
             const resultsResponse = response.data.results;
