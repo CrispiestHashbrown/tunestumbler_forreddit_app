@@ -61,22 +61,26 @@ export const topGetResults = () => {
             const resultsResponse = response.data.results;
             const nextUri = response.data.nextUri;
             const afterId = response.data.afterId;
-            const results = [];
-            for (let index in resultsResponse) {
-                let result = {};
-                result.id = resultsResponse[index].resultsId;
-                result.subreddit = resultsResponse[index].subreddit;
-                result.url = resultsResponse[index].url;
-                result.title = resultsResponse[index].title;
-                result.permalink = resultsResponse[index].permalink;
-                result.score = resultsResponse[index].score;
-                result.createdUtc = resultsResponse[index].createdUtc;
-                result.domain = resultsResponse[index].domain;
-                result.comments = resultsResponse[index].comments;
-                results.push(result);
-            }
+            if (!resultsResponse.length) {
+                dispatch(topGetNextResults(resultsResponse, nextUri, afterId));
+            } else {
+                const results = [];
+                for (let index in resultsResponse) {
+                    let result = {};
+                    result.id = resultsResponse[index].resultsId;
+                    result.subreddit = resultsResponse[index].subreddit;
+                    result.url = resultsResponse[index].url;
+                    result.title = resultsResponse[index].title;
+                    result.permalink = resultsResponse[index].permalink;
+                    result.score = resultsResponse[index].score;
+                    result.createdUtc = resultsResponse[index].createdUtc;
+                    result.domain = resultsResponse[index].domain;
+                    result.comments = resultsResponse[index].comments;
+                    results.push(result);
+                }
 
-            dispatch(resultsGetResultsSuccess(nextUri, afterId, results));
+                dispatch(resultsGetResultsSuccess(nextUri, afterId, results));
+            }
         })
         .catch(error => {
             dispatch(resultsGetResultsFail(error.response));
@@ -102,24 +106,28 @@ export const topGetNextResults = (results, nextUri, afterId) => {
         const uri = `/results/fetch/next`;
         axios.post(uri, postBody, {headers})
         .then(response => {
-            const resultsResponse = response.data.results;
-            const updatedResults = cloneDeep(results);
-            for (let index in resultsResponse) {
-                let result = {};
-                result.id = resultsResponse[index].resultsId;
-                result.subreddit = resultsResponse[index].subreddit;
-                result.url = resultsResponse[index].url;
-                result.title = resultsResponse[index].title;
-                result.permalink = resultsResponse[index].permalink;
-                result.score = resultsResponse[index].score;
-                result.createdUtc = resultsResponse[index].createdUtc;
-                result.domain = resultsResponse[index].domain;
-                result.comments = resultsResponse[index].comments;
-                updatedResults.push(result);
-            }
+            const newAfterId = response.data.afterId;
+            if (!response.data.results.length) {
+                dispatch(topGetNextResults(results, nextUri, newAfterId));
+            } else {
+                const resultsResponse = response.data.results;
+                const updatedResults = cloneDeep(results);
+                for (let index in resultsResponse) {
+                    let result = {};
+                    result.id = resultsResponse[index].resultsId;
+                    result.subreddit = resultsResponse[index].subreddit;
+                    result.url = resultsResponse[index].url;
+                    result.title = resultsResponse[index].title;
+                    result.permalink = resultsResponse[index].permalink;
+                    result.score = resultsResponse[index].score;
+                    result.createdUtc = resultsResponse[index].createdUtc;
+                    result.domain = resultsResponse[index].domain;
+                    result.comments = resultsResponse[index].comments;
+                    updatedResults.push(result);
+                }
 
-            const afterId = response.data.afterId;
-            dispatch(resultsGetNextResultsSuccess(afterId, updatedResults));
+                dispatch(resultsGetNextResultsSuccess(newAfterId, updatedResults));
+            }
         })
         .catch(error => {
             dispatch(resultsGetNextResultsFail(error.response));
