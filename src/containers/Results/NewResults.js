@@ -42,13 +42,21 @@ class Results extends Component {
         }
 
         let errorMessage = null;
-        if (this.props.timestamp && this.props.message) {
-            errorMessage = (
-                <Auxiliary>
-                    <p>Timestamp: {this.props.timestamp}</p>
-                    <p>Error: {this.props.message}</p>
-                </Auxiliary>
-            );
+        if (this.props.error) {
+            switch(this.props.error.status) {
+                case 400:
+                case 401:
+                    errorMessage = `Error: Bad request. Could not get results.`;
+                    break;
+                case 404:
+                    errorMessage = `Error: No results found. Make sure you set your filters.`;
+                    break;
+                case 500:
+                    errorMessage = `Error: Internal Server Error or Reddit Error. Try again later.`;
+                    break;
+                default:
+                    errorMessage = null;
+            }
         }
 
         let loading = null;
@@ -59,6 +67,7 @@ class Results extends Component {
         return (
             <Auxiliary className={classes.Results}>
                 Results: 
+                <br></br>
                 {errorMessage}
                 {loading}
                 <InfiniteScroll
@@ -83,8 +92,7 @@ const mapStateToProps = (state) => {
         nextUri: state.newResults.nextUri,
         afterId: state.newResults.afterId,
         didGetNextResults: state.newResults.didGetNextResults,
-        timestamp: state.newResults.timestamp,
-        message: state.newResults.message,
+        error: state.newResults.error,
         loading: state.newResults.loading
     };
 };

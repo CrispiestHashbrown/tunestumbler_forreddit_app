@@ -17,11 +17,10 @@ export const resultsGetResultsSuccess = (nextUri, afterId, results) => {
     };
 };
 
-export const resultsGetResultsFail = (timestamp, message) => {
+export const resultsGetResultsFail = (error) => {
     return {
         type: actionTypes.HOT_RESULTS_GET_RESULTS_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -39,11 +38,10 @@ export const resultsGetNextResultsSuccess = (afterId, updatedResults) => {
     };
 };
 
-export const resultsGetNextResultsFail = (timestamp, message) => {
+export const resultsGetNextResultsFail = (error) => {
     return {
         type: actionTypes.HOT_RESULTS_GET_NEXT_RESULTS_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -83,8 +81,7 @@ export const hotGetResults = () => {
             dispatch(resultsGetResultsSuccess(nextUri, afterId, results));
         })
         .catch(error => {
-            error = error.response.data;
-            dispatch(resultsGetResultsFail(error.timestamp, error.message));
+            dispatch(resultsGetResultsFail(error.response));
         });
     };
 };
@@ -129,8 +126,7 @@ export const hotGetNextResults = (results, nextUri, afterId) => {
             dispatch(resultsGetNextResultsSuccess(afterId, updatedResults));
         })
         .catch(error => {
-            error = error.response.data;
-            dispatch(resultsGetNextResultsFail(error.timestamp, error.message));
+            dispatch(resultsGetNextResultsFail(error.response));
         });
     };
 };
