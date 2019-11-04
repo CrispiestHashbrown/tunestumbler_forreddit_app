@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 import classes from './Signup.css';
 import * as actions from '../../store/actions/index';
 
-import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
@@ -125,14 +124,17 @@ class Signup extends Component {
         }
 
         let errorMessage = null;
-
-        if (this.props.timestamp && this.props.message) {
-            errorMessage = (
-                <Auxiliary>
-                    <p>Timestamp: {this.props.timestamp}</p>
-                    <p>Error: {this.props.message}</p>
-                </Auxiliary>
-            );
+        if (this.props.error) {
+            switch(this.props.error.status) {
+                case 400:
+                    errorMessage = `Error: ${this.props.error.data.errors[0].title}`;
+                    break;
+                case 500:
+                    errorMessage = `Error: Internal Server Error or Reddit Error. Try again later.`;
+                    break;
+                default:
+                    errorMessage = `Error: Could not resolve signup request. Try again later.`;
+            }
         }
 
         let signupRedirect = null;
@@ -141,11 +143,10 @@ class Signup extends Component {
         }
 
         return (
-            <div className={classes.Signup}>
+            <div>
                 {signupRedirect}
-                {/* TODO: add error styling */}
                 {errorMessage}
-                <form onSubmit={this.submitHandler}>
+                <form className={classes.Signup} onSubmit={this.submitHandler}>
                     {form}
                     <Button buttonType="Successful">Sign up</Button>
                 </form>
@@ -158,8 +159,7 @@ const mapStateToProps = (state) => {
     return {
         shouldRedirect: state.signup.shouldRedirect,
         loading: state.signup.loading,
-        timestamp: state.signup.timestamp,
-        message: state.signup.message
+        error: state.signup.error
     };
 };
 

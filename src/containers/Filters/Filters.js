@@ -219,10 +219,8 @@ class Filters extends Component {
             }
         },
         subreddits: [],
-        filters: [],
-        shouldUpdateFilters: false,
-        shouldCreateFilters: false
-    }
+        filters: []
+   }
 
     getSubreddits () {
         this.props.onGetSubredditsStart();
@@ -232,8 +230,7 @@ class Filters extends Component {
             'Accept': 'application/json'
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/aggregate/update/${userId}`;
+        const uri = `/aggregate/myaggregate`;
         axios.get(uri, {headers})
             .then(response => {
                 const subredditsResponse = response.data.aggregate;
@@ -256,8 +253,7 @@ class Filters extends Component {
 
             })
             .catch(error => {
-                error = error.response.data;
-                this.props.onGetSubredditsFail(error.timestamp, error.message);
+                this.props.onGetSubredditsFail(error.response);
             });
     }
 
@@ -269,8 +265,7 @@ class Filters extends Component {
             'Accept': 'application/json'
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/filters/${userId}`;
+        const uri = `/filters/myfilters`;
         axios.get(uri, {headers})
             .then(response => {
                 const filtersResponse = response.data.filters;
@@ -288,7 +283,8 @@ class Filters extends Component {
 
                     filters.push({
                         id: filtersResponse[index].filtersId,
-                        new: false,
+                        isNew: false,
+                        isActive: filtersResponse[index].isActive,
                         controls: initialControls
                     });
                 }
@@ -300,8 +296,7 @@ class Filters extends Component {
                 this.props.onGetFiltersSuccess();
             })
             .catch(error => {
-                error = error.response.data;
-                this.props.onGetFiltersFail(error.timestamp, error.message);
+                this.props.onGetFiltersFail(error.response);
             });
     }
 
@@ -318,7 +313,8 @@ class Filters extends Component {
         let controls = cloneDeep(this.state.controls);
         let newFilters = {
             id: uuid.v4(),
-            new: true,
+            isNew: true,
+            isActive: true,
             controls: controls
         };
 
@@ -331,14 +327,14 @@ class Filters extends Component {
         this.clearControlsHandler();
     }
 
+    // Set isActive property for removed filters to false
     removeControlsHandler = (filtersId) => {
         const index = this.state.filters.findIndex(filter => filter.id === filtersId);
-        const filterToRemove = cloneDeep(this.state.filters[index]);
-        
+        let filters = cloneDeep(this.state.filters);
+        filters[index].isActive = false;
+
         this.setState({
-            filters: this.state.filters.filter((filter) => {
-                return filter.id !== filterToRemove.id
-            })
+            filters: filters
         });
     }
 
@@ -347,14 +343,13 @@ class Filters extends Component {
         if (this.state.subreddits.length > 0) {
             let stateFiltersToUpdate = cloneDeep(this.state.filters)
                 .filter((filter) => {
-                    return filter.new === false
+                    return filter.isNew === false
                 });
 
             for (let filter in stateFiltersToUpdate) {
                 filtersToUpdate.push({
                     filtersId: stateFiltersToUpdate[filter].id,
-                    userId: localStorage.getItem('userId'),
-                    multireddit: null,
+                    multireddit: '',
                     subreddit: stateFiltersToUpdate[filter].controls.subreddit.value,
                     minScore: stateFiltersToUpdate[filter].controls.minScore.value,
                     priority: 0,
@@ -362,18 +357,13 @@ class Filters extends Component {
                     hideByKeyword: stateFiltersToUpdate[filter].controls.hideByKeyword.value,
                     showByKeyword: stateFiltersToUpdate[filter].controls.showByKeyword.value,
                     hideByDomain: stateFiltersToUpdate[filter].controls.hideByDomain.value,
-                    showByDomain: stateFiltersToUpdate[filter].controls.showByDomain.value
+                    showByDomain: stateFiltersToUpdate[filter].controls.showByDomain.value,
+                    isActive: stateFiltersToUpdate[filter].isActive
                 });
             }
         }
 
-        if (filtersToUpdate.length > 0) {
-            this.setState({
-                shouldUpdateFilters: true
-            });
-
-            this.props.onUpdateFilters(filtersToUpdate);
-        }
+        this.props.onUpdateFilters(filtersToUpdate);
     }
 
     sendNewFiltersToApi() {
@@ -381,14 +371,13 @@ class Filters extends Component {
         if (this.state.subreddits.length > 0) {
             let stateFiltersToCreate = cloneDeep(this.state.filters)
                 .filter((filter) => {
-                    return filter.new === true
+                    return filter.isNew === true
                 });
 
             for (let filter in stateFiltersToCreate) {
                 filtersToCreate.push({
                     filtersId: null,
-                    userId: localStorage.getItem('userId'),
-                    multireddit: null,
+                    multireddit: '',
                     subreddit: stateFiltersToCreate[filter].controls.subreddit.value,
                     minScore: stateFiltersToCreate[filter].controls.minScore.value,
                     priority: 0,
@@ -396,18 +385,13 @@ class Filters extends Component {
                     hideByKeyword: stateFiltersToCreate[filter].controls.hideByKeyword.value,
                     showByKeyword: stateFiltersToCreate[filter].controls.showByKeyword.value,
                     hideByDomain: stateFiltersToCreate[filter].controls.hideByDomain.value,
-                    showByDomain: stateFiltersToCreate[filter].controls.showByDomain.value
+                    showByDomain: stateFiltersToCreate[filter].controls.showByDomain.value,
+                    isActive: stateFiltersToCreate[filter].isActive
                 });
             }
         }
-
-        if (filtersToCreate.length > 0) {
-            this.setState({
-                shouldCreateFilters: true
-            });
-            
-            this.props.onCreateFilters(filtersToCreate);
-        }
+        
+        this.props.onCreateFilters(filtersToCreate);
     }
 
     searchHandler = (event) => {
@@ -445,6 +429,7 @@ class Filters extends Component {
         return isValid;
     }
 
+    // Update createFilterControls values
     controlsChangedHandler = (event, keyPrefix, controlName) => {
         if (keyPrefix === '') {
             const updatedControls = {
@@ -461,19 +446,24 @@ class Filters extends Component {
                 controls: updatedControls
             });
         } else {
-            const index = this.state.filters.findIndex(filter => filter.id === keyPrefix);
-            let filters = cloneDeep(this.state.filters);
-            filters[index].controls[controlName] = {
-                ...this.state.filters[index].controls[controlName],
-                value: event.target.value,
-                valid: this.checkValidity(event.target.value, this.state.filters[index].controls[controlName].validation),
-                touched: true
-            };
-
-            this.setState({ 
-                filters: filters 
-            });
+            this.filtersChangedHandler(event, keyPrefix, controlName);
         }
+    }
+
+    // Update filtersFormControls values
+    filtersChangedHandler = (event, keyPrefix, controlName) => {
+        const index = this.state.filters.findIndex(filter => filter.id === keyPrefix);
+        let filters = cloneDeep(this.state.filters);
+        filters[index].controls[controlName] = {
+            ...this.state.filters[index].controls[controlName],
+            value: event.target.value,
+            valid: this.checkValidity(event.target.value, this.state.filters[index].controls[controlName].validation),
+            touched: true
+        };
+
+        this.setState({ 
+            filters: filters 
+        });
     }
 
     render () {
@@ -522,45 +512,59 @@ class Filters extends Component {
             filtersForm = <Spinner />
         }
 
+        // If there are new or pre-existing filters
+        // Then for every filter that is active
+        // Dynamically push controls to the form
         const filtersFormArray = [];
         if (this.state.filters.length > 0 && this.props.didGetFilters) {
             for (let index in this.state.filters) {
-                const filterElementsArray = [];
-                for (let key in this.state.filters[index].controls) {
-                    filterElementsArray.push({
-                        filtersId: this.state.filters[index].id,
-                        id: key,
-                        config: this.state.filters[index].controls[key]
-                    });
+                if (this.state.filters[index].isActive) {
+                    const filterElementsArray = [];
+                    for (let key in this.state.filters[index].controls) {
+                        filterElementsArray.push({
+                            filtersId: this.state.filters[index].id,
+                            id: key,
+                            config: this.state.filters[index].controls[key]
+                        });
+                    }
+    
+                    filtersFormArray.push(
+                        <Auxiliary key={filterElementsArray[0].filtersId}>
+                            <Auxiliary>
+                                {controlsForm(filterElementsArray, filterElementsArray[0].filtersId, this.props.didGetFilters)}
+                            </Auxiliary>
+                            <Auxiliary>
+                                <Button buttonType="Successful" clicked={() => this.removeControlsHandler(filterElementsArray[0].filtersId)}>-</Button>
+                            </Auxiliary>
+                        </Auxiliary>
+                    );
                 }
-
-                filtersFormArray.push(
-                    <Auxiliary key={filterElementsArray[0].filtersId}>
-                        <Auxiliary>
-                            {controlsForm(filterElementsArray, filterElementsArray[0].filtersId, this.props.didGetFilters)}
-                        </Auxiliary>
-                        <Auxiliary>
-                            <Button buttonType="Successful" clicked={() => this.removeControlsHandler(filterElementsArray[0].filtersId)}>-</Button>
-                        </Auxiliary>
-                    </Auxiliary>
-                );
             }
 
             filtersForm = filtersFormArray;
-        }            
+        }
 
         let errorMessage = null;
-        if (this.props.timestamp && this.props.message) {
-            errorMessage = (
-                <Auxiliary>
-                    <p>Timestamp: {this.props.timestamp}</p>
-                    <p>Error: {this.props.message}</p>
-                </Auxiliary>
-            );
+        if (this.props.error) {
+            switch(this.props.error.status) {
+                case 400:
+                case 401:
+                    errorMessage = `Error: Bad request. Could not save filters.`;
+                    break;
+                case 404:
+                    errorMessage = `Error: No subreddits found on your Reddit account.`;
+                    break;
+                case 500:
+                    errorMessage = `Error: Internal Server Error or Reddit Error. Try again later.`;
+                    break;
+                default:
+                    errorMessage = null;
+            }
         }
 
         let filtersRedirect = null;
-        if ((this.state.shouldUpdateFilters && this.props.didUpdateFilters) || (this.state.shouldCreateFilters && this.props.didCreateFilters)) {
+        if (this.props.didUpdateFilters && this.props.didCreateFilters) {
+            this.props.onResetFiltersState();
             filtersRedirect = <Redirect to="/new" />
         }
 
@@ -587,8 +591,7 @@ const mapStateToProps = (state) => {
         didGetFilters: state.filters.didGetFilters,
         didUpdateFilters: state.filters.didUpdateFilters,
         didCreateFilters: state.filters.didCreateFilters,
-        timestamp: state.filters.timestamp,
-        message: state.filters.message,
+        error: state.filters.error,
         loading: state.filters.loading
     };
 };
@@ -597,12 +600,13 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onGetSubredditsStart: () => dispatch(actions.filtersGetSubredditsStart()),
         onGetSubredditsSuccess: () => dispatch(actions.filtersGetSubredditsSuccess()),
-        onGetSubredditsFail: (timestamp, message) => dispatch(actions.filtersGetSubredditsFail(timestamp, message)),
+        onGetSubredditsFail: (error) => dispatch(actions.filtersGetSubredditsFail(error)),
         onGetFiltersStart: () => dispatch(actions.filtersGetStart()),
         onGetFiltersSuccess: () => dispatch(actions.filtersGetSuccess()),
-        onGetFiltersFail: (timestamp, message) => dispatch(actions.filtersGetFail(timestamp, message)),
+        onGetFiltersFail: (error) => dispatch(actions.filtersGetFail(error)),
         onUpdateFilters: (filtersToUpdate) => dispatch(actions.updateFilters(filtersToUpdate)),
-        onCreateFilters: (filtersToCreate) => dispatch(actions.createFilters(filtersToCreate))
+        onCreateFilters: (filtersToCreate) => dispatch(actions.createFilters(filtersToCreate)),
+        onResetFiltersState: () => dispatch(actions.resetFiltersState())
     };
 };
 

@@ -17,11 +17,10 @@ export const resultsGetResultsSuccess = (nextUri, afterId, results) => {
     };
 };
 
-export const resultsGetResultsFail = (timestamp, message) => {
+export const resultsGetResultsFail = (error) => {
     return {
         type: actionTypes.TOP_RESULTS_GET_RESULTS_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -39,11 +38,10 @@ export const resultsGetNextResultsSuccess = (afterId, updatedResults) => {
     };
 };
 
-export const resultsGetNextResultsFail = (timestamp, message) => {
+export const resultsGetNextResultsFail = (error) => {
     return {
         type: actionTypes.TOP_RESULTS_GET_NEXT_RESULTS_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -57,14 +55,12 @@ export const topGetResults = () => {
             'Accept': 'application/json'
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/results/fetch/${userId}/top`;
-
+        const uri = `/results/fetch/myresults/top`;
         axios.get(uri, {headers})
         .then(response => {
             const resultsResponse = response.data.results;
-            const nextUri = resultsResponse[0].nextUri;
-            const afterId = resultsResponse[0].afterId;
+            const nextUri = response.data.nextUri;
+            const afterId = response.data.afterId;
             const results = [];
             for (let index in resultsResponse) {
                 let result = {};
@@ -83,8 +79,7 @@ export const topGetResults = () => {
             dispatch(resultsGetResultsSuccess(nextUri, afterId, results));
         })
         .catch(error => {
-            error = error.response.data;
-            dispatch(resultsGetResultsFail(error.timestamp, error.message));
+            dispatch(resultsGetResultsFail(error.response));
         });
     };
 };
@@ -104,9 +99,7 @@ export const topGetNextResults = (results, nextUri, afterId) => {
             'afterId': afterId
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/results/fetch/next/${userId}`;
-
+        const uri = `/results/fetch/next`;
         axios.post(uri, postBody, {headers})
         .then(response => {
             const resultsResponse = response.data.results;
@@ -125,12 +118,11 @@ export const topGetNextResults = (results, nextUri, afterId) => {
                 updatedResults.push(result);
             }
 
-            const afterId = resultsResponse[0].afterId;
+            const afterId = response.data.afterId;
             dispatch(resultsGetNextResultsSuccess(afterId, updatedResults));
         })
         .catch(error => {
-            error = error.response.data;
-            dispatch(resultsGetNextResultsFail(error.timestamp, error.message));
+            dispatch(resultsGetNextResultsFail(error.response));
         });
     };
 };

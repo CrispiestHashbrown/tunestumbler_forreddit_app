@@ -7,8 +7,7 @@ const initialState = {
     afterId: '',
     didGetNextResults: false,
     results: [],
-    timestamp: null,
-    message: null,
+    error: null,
     loading: false
 };
 
@@ -18,8 +17,7 @@ const resultsGetResultsStart = (state) => {
         nextUri: '',
         afterId: '',
         results: [],
-        timestamp: null,
-        message: null,
+        error: null,
         loading: true
     });
 };
@@ -30,8 +28,7 @@ const resultsGetResultsSuccess = (state, action) => {
         nextUri: action.nextUri,
         afterId: action.afterId,
         results: action.results,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: false
     });
 };
@@ -39,8 +36,7 @@ const resultsGetResultsSuccess = (state, action) => {
 const resultsGetResultsFail = (state, action) => {
     return updateObject(state, {
         didGetResults: false,
-        timestamp: action.timestamp,
-        message: action.message,
+        error: action.error,
         loading: false
     });
 };
@@ -48,8 +44,7 @@ const resultsGetResultsFail = (state, action) => {
 const resultsGetNextResultsStart = (state) => {
     return updateObject(state, {
         didGetNextResults: false,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: true
     });
 };
@@ -59,8 +54,7 @@ const resultsGetNextResultsSuccess = (state, action) => {
         afterId: action.afterId,
         didGetNextResults: true,
         results: action.updatedResults,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: false
     });
 };
@@ -69,8 +63,7 @@ const resultsGetNextResultsFail = (state, action) => {
     return updateObject(state, {
         afterId: '',
         didGetNextResults: false,
-        timestamp: action.timestamp,
-        message: action.message,
+        error: action.error,
         loading: false
     });
 };

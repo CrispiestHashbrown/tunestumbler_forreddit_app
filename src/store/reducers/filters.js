@@ -6,16 +6,22 @@ const initialState = {
     didGetFilters: false,
     didUpdateFilters: false,
     didCreateFilters: false,
-    timestamp: null,
-    message: null,
+    error: null,
     loading: false
 };
+
+const filtersUpdateReset = (state) => {
+    return updateObject(state, initialState);
+}
+
+const filtersCreateReset = (state) => {
+    return updateObject(state, initialState);
+}
 
 const filtersGetSubredditsStart = (state) => {
     return updateObject(state, {
         didGetSubreddits: false,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: true
     });
 };
@@ -23,8 +29,7 @@ const filtersGetSubredditsStart = (state) => {
 const filtersGetSubredditsSuccess = (state) => {
     return updateObject(state, {
         didGetSubreddits: true,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: false
     });
 };
@@ -32,8 +37,7 @@ const filtersGetSubredditsSuccess = (state) => {
 const filtersGetSubredditsFail = (state, action) => {
     return updateObject(state, {
         didGetSubreddits: false,
-        timestamp: action.timestamp,
-        message: action.message,
+        error: action.error,
         loading: false
     });
 };
@@ -41,8 +45,7 @@ const filtersGetSubredditsFail = (state, action) => {
 const filtersGetStart = (state) => {
     return updateObject(state, {
         didGetFilters: false,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: true
     });
 };
@@ -50,8 +53,7 @@ const filtersGetStart = (state) => {
 const filtersGetSuccess = (state) => {
     return updateObject(state, {
         didGetFilters: true,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: false
     });
 };
@@ -59,8 +61,7 @@ const filtersGetSuccess = (state) => {
 const filtersGetFail = (state, action) => {
     return updateObject(state, {
         didGetFilters: false,
-        timestamp: action.timestamp,
-        message: action.message,
+        error: action.error,
         loading: false
     });
 };
@@ -68,8 +69,7 @@ const filtersGetFail = (state, action) => {
 const filtersUpdateStart = (state) => {
     return updateObject(state, {
         didUpdateFilters: false,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: true
     });
 };
@@ -77,8 +77,7 @@ const filtersUpdateStart = (state) => {
 const filtersUpdateSuccess = (state) => {
     return updateObject(state, {
         didUpdateFilters: true,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: false
     });
 };
@@ -86,8 +85,7 @@ const filtersUpdateSuccess = (state) => {
 const filtersUpdateFail = (state, action) => {
     return updateObject(state, {
         didUpdateFilters: false,
-        timestamp: action.timestamp,
-        message: action.message,
+        error: action.error,
         loading: false
     });
 };
@@ -95,8 +93,7 @@ const filtersUpdateFail = (state, action) => {
 const filtersCreateStart = (state) => {
     return updateObject(state, {
         didCreateFilters: false,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: true
     });
 };
@@ -104,8 +101,7 @@ const filtersCreateStart = (state) => {
 const filtersCreateSuccess = (state) => {
     return updateObject(state, {
         didCreateFilters: true,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: false
     });
 };
@@ -113,14 +109,17 @@ const filtersCreateSuccess = (state) => {
 const filtersCreateFail = (state, action) => {
     return updateObject(state, {
         didCreateFilters: false,
-        timestamp: action.timestamp,
-        message: action.message,
+        error: action.error,
         loading: false
     });
 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case actionTypes.FILTERS_UPDATE_RESET:
+            return filtersUpdateReset(state);
+        case actionTypes.FILTERS_CREATE_RESET:
+            return filtersCreateReset(state);
         case actionTypes.FILTERS_GET_SUBREDDITS_START:
             return filtersGetSubredditsStart(state);
         case actionTypes.FILTERS_GET_SUBREDDITS_SUCCESS:

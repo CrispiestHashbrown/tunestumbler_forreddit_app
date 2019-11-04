@@ -8,8 +8,7 @@ describe('connect reducer', () => {
         code: null,
         redditLifetime: null,
         redditExpiration: null,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: false
     };
 
@@ -27,10 +26,9 @@ describe('connect reducer', () => {
             isConnected: false,
             stateString: 'stateString',
             code: 'code',
-            timestamp: null,
             redditLifetime: null,
             redditExpiration: null,
-            message: null,
+            error: null,
             loading: true
         });
     });
@@ -47,8 +45,7 @@ describe('connect reducer', () => {
             code: null,
             redditLifetime: 'redditLifetime',
             redditExpiration: 'redditExpiration',
-            timestamp: null,
-            message: null,
+            error: null,
             loading: false
         });
     });

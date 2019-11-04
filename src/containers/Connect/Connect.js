@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 import classes from './Connect.css';
 import * as actions from '../../store/actions/index';
 
-import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
@@ -30,14 +29,19 @@ class Connect extends Component {
         }
 
         let errorMessage = null;
-
-        if (this.props.timestamp && this.props.message) {
-            errorMessage = (
-                <Auxiliary>
-                    <p>Timestamp: {this.props.timestamp}</p>
-                    <p>Error: {this.props.message}</p>
-                </Auxiliary>
-            );
+        if (this.props.error) {
+            switch(this.props.error.status) {
+                case 400:
+                case 401:
+                case 404:
+                    errorMessage = `Error: Bad request.`;
+                    break;
+                case 500:
+                    errorMessage = `Error: Internal Server Error or Reddit Error. Try again later.`;
+                    break;
+                default:
+                    errorMessage = null;
+            }
         }
 
         let connectRedirect = null;
@@ -48,8 +52,8 @@ class Connect extends Component {
         return (
             <div className={classes.Connect}>
                 {connectRedirect}
-                {/* TODO: add error styling */}
                 {errorMessage}
+                <br></br>
                 <p>By clicking the 'Connect your Reddit account' button,</p>
                 <p>You agree to grant Tunestumbler.com the</p>
                 <p>following permissions (scopes) to your Reddit account:</p>
@@ -83,8 +87,7 @@ const mapStateToProps = (state) => {
         stateString: state.connect.stateString,
         code: state.connect.code,
         loading: state.connect.loading,
-        timestamp: state.connect.timestamp,
-        message: state.connect.message
+        error: state.connect.error
     };
 };
 
