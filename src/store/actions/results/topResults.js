@@ -59,8 +59,8 @@ export const topGetResults = () => {
         axios.get(uri, {headers})
         .then(response => {
             const resultsResponse = response.data.results;
-            const nextUri = resultsResponse[0].nextUri;
-            const afterId = resultsResponse[0].afterId;
+            const nextUri = response.data.nextUri;
+            const afterId = response.data.afterId;
             const results = [];
             for (let index in resultsResponse) {
                 let result = {};
@@ -118,7 +118,7 @@ export const topGetNextResults = (results, nextUri, afterId) => {
                 updatedResults.push(result);
             }
 
-            const afterId = resultsResponse[0].afterId;
+            const afterId = response.data.afterId;
             dispatch(resultsGetNextResultsSuccess(afterId, updatedResults));
         })
         .catch(error => {
