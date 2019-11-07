@@ -17,11 +17,10 @@ export const resultsGetResultsSuccess = (nextUri, afterId, results) => {
     };
 };
 
-export const resultsGetResultsFail = (timestamp, message) => {
+export const resultsGetResultsFail = (error) => {
     return {
         type: actionTypes.HOT_RESULTS_GET_RESULTS_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -39,11 +38,10 @@ export const resultsGetNextResultsSuccess = (afterId, updatedResults) => {
     };
 };
 
-export const resultsGetNextResultsFail = (timestamp, message) => {
+export const resultsGetNextResultsFail = (error) => {
     return {
         type: actionTypes.HOT_RESULTS_GET_NEXT_RESULTS_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -57,34 +55,35 @@ export const hotGetResults = () => {
             'Accept': 'application/json'
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/results/fetch/${userId}/hot`;
-
+        const uri = `/results/fetch/myresults/hot`;
         axios.get(uri, {headers})
         .then(response => {
             const resultsResponse = response.data.results;
-            const nextUri = resultsResponse[0].nextUri;
-            const afterId = resultsResponse[0].afterId;
-            const results = [];
-            for (let index in resultsResponse) {
-                let result = {};
-                result.id = resultsResponse[index].resultsId;
-                result.subreddit = resultsResponse[index].subreddit;
-                result.url = resultsResponse[index].url;
-                result.title = resultsResponse[index].title;
-                result.permalink = resultsResponse[index].permalink;
-                result.score = resultsResponse[index].score;
-                result.createdUtc = resultsResponse[index].createdUtc;
-                result.domain = resultsResponse[index].domain;
-                result.comments = resultsResponse[index].comments;
-                results.push(result);
-            }
+            const nextUri = response.data.nextUri;
+            const afterId = response.data.afterId;
+            if (!resultsResponse.length) {
+                dispatch(hotGetNextResults(resultsResponse, nextUri, afterId));
+            } else {
+                const results = [];
+                for (let index in resultsResponse) {
+                    let result = {};
+                    result.id = resultsResponse[index].resultsId;
+                    result.subreddit = resultsResponse[index].subreddit;
+                    result.url = resultsResponse[index].url;
+                    result.title = resultsResponse[index].title;
+                    result.permalink = resultsResponse[index].permalink;
+                    result.score = resultsResponse[index].score;
+                    result.createdUtc = resultsResponse[index].createdUtc;
+                    result.domain = resultsResponse[index].domain;
+                    result.comments = resultsResponse[index].comments;
+                    results.push(result);
+                }
 
-            dispatch(resultsGetResultsSuccess(nextUri, afterId, results));
+                dispatch(resultsGetResultsSuccess(nextUri, afterId, results));
+            }
         })
         .catch(error => {
-            error = error.response.data;
-            dispatch(resultsGetResultsFail(error.timestamp, error.message));
+            dispatch(resultsGetResultsFail(error.response));
         });
     };
 };
@@ -104,33 +103,34 @@ export const hotGetNextResults = (results, nextUri, afterId) => {
             'afterId': afterId
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/results/fetch/next/${userId}`;
-
+        const uri = `/results/fetch/next`;
         axios.post(uri, postBody, {headers})
         .then(response => {
-            const resultsResponse = response.data.results;
-            const updatedResults = cloneDeep(results);
-            for (let index in resultsResponse) {
-                let result = {};
-                result.id = resultsResponse[index].resultsId;
-                result.subreddit = resultsResponse[index].subreddit;
-                result.url = resultsResponse[index].url;
-                result.title = resultsResponse[index].title;
-                result.permalink = resultsResponse[index].permalink;
-                result.score = resultsResponse[index].score;
-                result.createdUtc = resultsResponse[index].createdUtc;
-                result.domain = resultsResponse[index].domain;
-                result.comments = resultsResponse[index].comments;
-                updatedResults.push(result);
-            }
+            const newAfterId = response.data.afterId;
+            if (!response.data.results.length) {
+                dispatch(hotGetNextResults(results, nextUri, newAfterId));
+            } else {
+                const resultsResponse = response.data.results;
+                const updatedResults = cloneDeep(results);
+                for (let index in resultsResponse) {
+                    let result = {};
+                    result.id = resultsResponse[index].resultsId;
+                    result.subreddit = resultsResponse[index].subreddit;
+                    result.url = resultsResponse[index].url;
+                    result.title = resultsResponse[index].title;
+                    result.permalink = resultsResponse[index].permalink;
+                    result.score = resultsResponse[index].score;
+                    result.createdUtc = resultsResponse[index].createdUtc;
+                    result.domain = resultsResponse[index].domain;
+                    result.comments = resultsResponse[index].comments;
+                    updatedResults.push(result);
+                }
 
-            const afterId = resultsResponse[0].afterId;
-            dispatch(resultsGetNextResultsSuccess(afterId, updatedResults));
+                dispatch(resultsGetNextResultsSuccess(newAfterId, updatedResults));
+            }
         })
         .catch(error => {
-            error = error.response.data;
-            dispatch(resultsGetNextResultsFail(error.timestamp, error.message));
+            dispatch(resultsGetNextResultsFail(error.response));
         });
     };
 };

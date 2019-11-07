@@ -26,7 +26,8 @@ export {
     filtersGetSuccess,
     filtersGetFail,
     updateFilters,
-    createFilters
+    createFilters,
+    resetFiltersState
 } from './filters';
 
 export {

@@ -7,8 +7,7 @@ const initialState = {
     code: null,
     redditLifetime: null,
     redditExpiration: null,
-    timestamp: null,
-    message: null,
+    error: null,
     loading: false
 };
 
@@ -17,10 +16,9 @@ const connectStart = (state) => {
         isConnected: false,
         stateString: null,
         code: null,
-        timestamp: null,
         redditLifetime: null,
         redditExpiration: null,
-        message: null,
+        error: null,
         loading: true
     });
 };
@@ -32,8 +30,7 @@ const connectSuccess = (state, action) => {
         code: null,
         redditLifetime: action.redditLifetime,
         redditExpiration: action.redditExpiration,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: false
     });
 };
@@ -43,8 +40,7 @@ const connectFail = (state, action) => {
         isConnected: false,
         redditLifetime: null,
         redditExpiration: null,
-        timestamp: action.timestamp,
-        message: action.message,
+        error: action.error,
         loading: false
     });
 };
@@ -62,10 +58,9 @@ const connectHandlerStart = (state, action) => {
         isConnected: false,
         stateString: action.stateString,
         code: action.code,
-        timestamp: null,
         redditLifetime: null,
         redditExpiration: null,
-        message: null,
+        error: null,
         loading: true
     });
 };
@@ -77,8 +72,7 @@ const connectHandlerFail = (state, action) => {
         code: null,
         redditLifetime: null,
         redditExpiration: null,
-        timestamp: action.timestamp,
-        message: action.message,
+        error: action.error,
         loading: false
     });
 };

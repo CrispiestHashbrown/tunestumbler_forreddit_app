@@ -8,24 +8,21 @@ export const loginStart = () => {
     };
 };
 
-export const loginSuccess = (userId, loginToken) => {
+export const loginSuccess = (loginToken) => {
     return {
         type: actionTypes.LOGIN_SUCCESS,
-        userId: userId,
         loginToken: loginToken
     };
 };
 
-export const loginFail = (timestamp, message) => {
+export const loginFail = (error) => {
     return {
         type: actionTypes.LOGIN_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
 export const logout = () => {
-    localStorage.removeItem('userId');
     localStorage.removeItem('loginToken');
     localStorage.removeItem('expirationDate');
     localStorage.removeItem('lifetime');
@@ -61,32 +58,29 @@ export const login = (email, password) => {
             .then(response => {
                 const lifetime = response.headers.lifetime;
                 const expirationDate = new Date(new Date().getTime() + new Date().setTime(lifetime));
-                localStorage.setItem('userId', response.headers.userid);
                 localStorage.setItem('loginToken', response.headers.authorization);
                 localStorage.setItem('expirationDate', expirationDate);
                 localStorage.setItem('lifetime', lifetime);
-                dispatch(loginSuccess(response.headers.userid, response.headers.authorization));
+                dispatch(loginSuccess(response.headers.authorization));
                 dispatch(checkLoginTimeout(lifetime));
             })
             .catch(error => {
-                error = error.response.data;
-                dispatch(loginFail(error.timestamp, error.message));
+                dispatch(loginFail(error.response));
             });
     };
 };
 
 export const loginCheckState = () => {
     return (dispatch) => {
-        const userId = localStorage.getItem('userId');
         const loginToken = localStorage.getItem('loginToken');
-        if ((!userId || userId === 'undefined') && (!loginToken || loginToken === 'undefined')) {
+        if (!loginToken || loginToken === 'undefined') {
             dispatch(logout());
         } else {
             const expirationDate = new Date(localStorage.getItem('expirationDate'));
             if (expirationDate <= new Date()) {
                 dispatch(logout());
             } else {
-                dispatch(loginSuccess(userId, loginToken));
+                dispatch(loginSuccess(loginToken));
                 checkLoginTimeout(Number(localStorage.getItem('lifetime')));
             }
         }

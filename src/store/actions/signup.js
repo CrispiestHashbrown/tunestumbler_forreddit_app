@@ -20,11 +20,10 @@ export const signupSuccess = () => {
     };
 };
 
-export const signupFail = (timestamp, message) => {
+export const signupFail = (error) => {
     return {
         type: actionTypes.SIGNUP_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -48,8 +47,7 @@ export const signup = (email, password) => {
                 dispatch(signupReset());
             })
             .catch(error => {
-                error = error.response.data;
-                dispatch(signupFail(error.timestamp, error.message));
+                dispatch(signupFail(error.response));
             });
     };
 };

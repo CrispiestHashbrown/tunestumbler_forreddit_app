@@ -3,8 +3,7 @@ import { updateObject } from '../utility';
 
 const initialState = {
     shouldRedirect: false,
-    timestamp: null,
-    message: null,
+    error: null,
     loading: false
 };
 
@@ -15,8 +14,7 @@ const signupReset = (state) => {
 const signupStart = (state) => {
     return updateObject(state, {
         shouldRedirect: false,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: true
     });
 }
@@ -24,8 +22,7 @@ const signupStart = (state) => {
 const signupSuccess = (state) => {
     return updateObject(state, {
         shouldRedirect: true,
-        timestamp: null,
-        message: null,
+        error: null,
         loading: false
     });
 }
@@ -33,8 +30,7 @@ const signupSuccess = (state) => {
 const signupFail = (state, action) => {
     return updateObject(state, {
         shouldRedirect: false,
-        timestamp: action.timestamp,
-        message: action.message,
+        error: action.error,
         loading: false
     });
 }

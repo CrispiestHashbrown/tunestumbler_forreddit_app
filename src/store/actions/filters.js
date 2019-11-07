@@ -2,6 +2,18 @@ import axios from '../../axios-urls/axios-tunestumbler';
 
 import * as actionTypes from './actionTypes';
 
+export const filtersUpdateReset = () => {
+    return {
+        type: actionTypes.FILTERS_UPDATE_RESET
+    }
+};
+
+export const filtersCreateReset = () => {
+    return {
+        type: actionTypes.FILTERS_CREATE_RESET
+    }
+};
+
 export const filtersGetSubredditsStart = () => {
     return {
         type: actionTypes.FILTERS_GET_SUBREDDITS_START
@@ -14,11 +26,10 @@ export const filtersGetSubredditsSuccess = () => {
     };
 };
 
-export const filtersGetSubredditsFail = (timestamp, message) => {
+export const filtersGetSubredditsFail = (error) => {
     return {
         type: actionTypes.FILTERS_GET_SUBREDDITS_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -34,11 +45,10 @@ export const filtersGetSuccess = () => {
     };
 };
 
-export const filtersGetFail = (timestamp, message) => {
+export const filtersGetFail = (error) => {
     return {
         type: actionTypes.FILTERS_GET_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -54,11 +64,10 @@ export const filtersUpdateSuccess = () => {
     };
 };
 
-export const filtersUpdateFail = (timestamp, message) => {
+export const filtersUpdateFail = (error) => {
     return {
         type: actionTypes.FILTERS_UPDATE_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -74,11 +83,10 @@ export const filtersCreateSuccess = () => {
     };
 };
 
-export const filtersCreateFail = (timestamp, message) => {
+export const filtersCreateFail = (error) => {
     return {
         type: actionTypes.FILTERS_CREATE_FAIL,
-        timestamp: timestamp,
-        message: message
+        error: error
     };
 };
 
@@ -92,16 +100,13 @@ export const updateFilters = (filters) => {
             'Accept': 'application/json'
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/filters/${userId}`;
-        
+        const uri = `/filters/myfilters`;
         axios.put(uri, {filters: filters}, {headers})
             .then(response => {
                 dispatch(filtersUpdateSuccess());
             })
             .catch(error => {
-                error = error.response.data;
-                dispatch(filtersUpdateFail(error.timestamp, error.message));
+                dispatch(filtersUpdateFail(error.response));
             });
     };
 };
@@ -116,15 +121,20 @@ export const createFilters = (filters) => {
             'Accept': 'application/json'
         };
 
-        const userId = localStorage.getItem('userId');
-        const uri = `/filters/${userId}`;
+        const uri = `/filters/myfilters`;
         axios.post(uri, {filters: filters}, {headers})
             .then(response => {
                 dispatch(filtersCreateSuccess());
             })
             .catch(error => {
-                error = error.response.data;
-                dispatch(filtersCreateFail(error.timestamp, error.message));
+                dispatch(filtersCreateFail(error.response));
             });
+    };
+};
+
+export const resetFiltersState = () => {
+    return (dispatch) => {
+        dispatch(filtersUpdateReset());
+        dispatch(filtersCreateReset());
     };
 };
