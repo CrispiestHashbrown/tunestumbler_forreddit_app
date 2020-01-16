@@ -1,46 +1,28 @@
 import React from 'react';
 
+import { Form } from 'react-bootstrap';
 import classes from './Input.css';
 
 const input = (props) => {
     let inputClasses = [];
-    switch (props.elementDisplay) {
-        case('block'):
-            inputClasses = [classes.Input];
-            break;
-        case('normal'):
-            inputClasses = [classes.RowNormal];
-            break;
-        case('small'):
-            inputClasses = [classes.RowSmall];
-            break;
-        default:
-            inputClasses = [];
-    }    
 
-    if (props.invalid && props.shouldValidate && props.touched) {
+    if (props.invalid && props.touched) {
         inputClasses.push(classes.Invalid);
     }
 
     let inputElement = null;
     switch (props.elementType) {
         case('input'):
-            inputElement = <input 
+            inputElement = <Form.Control
                 className={inputClasses.join(' ')} 
                 {...props.elementConfig} 
-                value={props.value}
-                onChange={props.changed} />;
-            break;
-        case('textarea'):
-            inputElement = <textarea 
-                className={inputClasses.join(' ')} 
-                {...props.elementConfig}
                 value={props.value}
                 onChange={props.changed} />;
             break;
         case('select'):
             inputElement = <select 
                     className={inputClasses.join(' ')}
+                    {...props.elementConfig} 
                     value={props.value}
                     onChange={props.changed}>
                     {props.options.map(option => (
@@ -51,7 +33,7 @@ const input = (props) => {
                 </select>;
             break;
         default:
-            inputElement = <input 
+            inputElement = <Form.Control
                 className={inputClasses.join(' ')} 
                 {...props.elementConfig} 
                 value={props.value}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
+import { Form } from 'react-bootstrap';
 import classes from './Login.css';
 import * as actions from '../../store/actions/index';
 
@@ -13,11 +14,10 @@ class Login extends Component {
     state = {
         controls: {
             email: {
-                elementDisplay: 'block',
+                label: 'Email:',
                 elementType: 'input',
                 elementConfig: {
                     type: 'email',
-                    placeholder: 'Email'
                 },
                 value: '',
                 validation: {
@@ -28,11 +28,10 @@ class Login extends Component {
                 touched: false
             },
             password: {
-                elementDisplay: 'block',
+                label: 'Password:',
                 elementType: 'input',
                 elementConfig: {
                     type: 'password',
-                    placeholder: 'Password'
                 },
                 value: '',
                 validation: {
@@ -92,6 +91,12 @@ class Login extends Component {
         });
     }
 
+    onEnter = (event) => {
+        if (event.key === "Enter") {
+            this.submitHandler(event);
+        }
+    }
+
     submitHandler = (event) => {
         event.preventDefault();
         this.props.onLogin(this.state.controls.email.value, this.state.controls.password.value);
@@ -107,16 +112,20 @@ class Login extends Component {
         }
 
         let form = formElementsArray.map(formElement => (
-            <Input 
-                key={formElement.id}
-                elementDisplay={formElement.config.elementDisplay}
-                elementType={formElement.config.elementType}
-                elementConfig={formElement.config.elementConfig}
-                value={formElement.config.value}
-                invalid={!formElement.config.valid}
-                shouldValidate={formElement.config.validation}
-                touched={formElement.config.touched}
-                changed={(event) => this.inputChangedHandler(event, formElement.id)} />
+            <Form.Group key={`group-${formElement.id}`}>
+                <Form.Label className={classes.LoginLabel} >
+                    {formElement.config.label}
+                </Form.Label>
+                <Input 
+                    key={`input-${formElement.id}`}
+                    elementType={formElement.config.elementType}
+                    elementConfig={formElement.config.elementConfig}
+                    value={formElement.config.value}
+                    invalid={!formElement.config.valid}
+                    shouldValidate={formElement.config.validation}
+                    touched={formElement.config.touched}
+                    changed={(event) => this.inputChangedHandler(event, formElement.id)} />
+            </Form.Group>
         ));
 
         if (this.props.loading) {
@@ -146,10 +155,13 @@ class Login extends Component {
             <div>
                 {loginRedirect}
                 {errorMessage}
-                <form className={classes.Login} onSubmit={this.submitHandler}>
+                <Form className={classes.Login} onKeyPress={this.onEnter} noValidate>
                     {form}
-                    <Button buttonType="Successful">Log in</Button>
-                </form>
+                    <Button 
+                        className={classes.LoginButton} 
+                        buttonType="Successful" 
+                        clicked={this.submitHandler}>Log in</Button>
+                </Form>
            </div>
         );
     }
