@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { cloneDeep } from 'lodash';
 import uuid from 'uuid';
 
+import { ButtonToolbar, Col, Form } from 'react-bootstrap';
 import classes from './Filters.css';
 import * as actions from '../../store/actions/index';
 import axios from '../../axios-urls/axios-tunestumbler';
@@ -20,7 +21,6 @@ class Filters extends Component {
 
     initialControlValues = {
         subreddit: {
-            elementDisplay: 'normal',
             elementType: 'select',
             elementConfig: {
                 placeholder: '<subreddit>'
@@ -29,13 +29,13 @@ class Filters extends Component {
             validation: {
                 required: true,
                 maxLength: 21,
-                minLength: 1
+                minLength: 1,
+                message: 'Subreddit is required'
             },
-            valid: false,
+            isValid: false,
             touched: true
         },
         minScore: {
-            elementDisplay: 'small',
             elementType: 'input',
             elementConfig: {
                 type: 'number',
@@ -47,13 +47,13 @@ class Filters extends Component {
                 isNumeric: true,
                 minValue: 1,
                 maxValue: 99999999,
-                minLength: 0
+                minLength: 0,
+                message: 'Invalid score value'
             },
-            valid: false,
+            isValid: false,
             touched: false
         },
         hideByDomain: {
-            elementDisplay: 'normal',
             elementType: 'input',
             elementConfig: {
                 type: 'text',
@@ -63,13 +63,13 @@ class Filters extends Component {
             validation: {
                 required: false,
                 maxLength: 15,
-                minLength: 0
+                minLength: 0,
+                message: 'Domain is too long'
             },
-            valid: false,
+            isValid: false,
             touched: false
         },
         hideByKeyword: {
-            elementDisplay: 'normal',
             elementType: 'input',
             elementConfig: {
                 type: 'text',
@@ -79,41 +79,42 @@ class Filters extends Component {
             validation: {
                 required: false,
                 maxLength: 50,
-                minLength: 0
+                minLength: 0,
+                message: 'Keyword is too long'
             },
-            valid: false,
+            isValid: false,
             touched: false
         },
         showByDomain: {
-            elementDisplay: 'normal',
             elementType: 'input',
             elementConfig: {
                 type: 'text',
-                placeholder: '<only show from domain>'
+                placeholder: '<show by domain>'
             },
             value: '',
             validation: {
                 required: false,
                 maxLength: 15,
-                minLength: 0
+                minLength: 0,
+                message: 'Domain is too long'
             },
-            valid: false,
+            isValid: false,
             touched: false
         },
         showByKeyword: {
-            elementDisplay: 'normal',
             elementType: 'input',
             elementConfig: {
                 type: 'text',
-                placeholder: '<only show by keyword>'
+                placeholder: '<show by keyword>'
             },
             value: '',
             validation: {
                 required: false,
                 maxLength: 50,
-                minLength: 0
+                minLength: 0,
+                message: 'Keyword is too long'
             },
-            valid: false,
+            isValid: false,
             touched: false
         }
     }
@@ -121,7 +122,6 @@ class Filters extends Component {
     state = {
         controls: {
             subreddit: {
-                elementDisplay: 'normal',
                 elementType: 'select',
                 elementConfig: {
                     placeholder: '<subreddit>'
@@ -130,13 +130,13 @@ class Filters extends Component {
                 validation: {
                     required: true,
                     maxLength: 21,
-                    minLength: 1
+                    minLength: 1,
+                    message: 'Subreddit is required'
                 },
-                valid: false,
+                isValid: false,
                 touched: true
             },
             minScore: {
-                elementDisplay: 'small',
                 elementType: 'input',
                 elementConfig: {
                     type: 'number',
@@ -148,13 +148,13 @@ class Filters extends Component {
                     isNumeric: true,
                     minValue: 1,
                     maxValue: 99999999,
-                    minLength: 0
+                    minLength: 0,
+                    message: 'Invalid score value'
                 },
-                valid: false,
+                isValid: false,
                 touched: false
             },
             hideByDomain: {
-                elementDisplay: 'normal',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
@@ -164,13 +164,13 @@ class Filters extends Component {
                 validation: {
                     required: false,
                     maxLength: 15,
-                    minLength: 0
+                    minLength: 0,
+                    message: 'Domain is too long'
                 },
-                valid: false,
+                isValid: false,
                 touched: false
             },
             hideByKeyword: {
-                elementDisplay: 'normal',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
@@ -180,47 +180,48 @@ class Filters extends Component {
                 validation: {
                     required: false,
                     maxLength: 50,
-                    minLength: 0
+                    minLength: 0,
+                    message: 'Keyword is too long'
                 },
-                valid: false,
+                isValid: false,
                 touched: false
             },
             showByDomain: {
-                elementDisplay: 'normal',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: '<only show from domain>'
+                    placeholder: '<show by domain>'
                 },
                 value: '',
                 validation: {
                     required: false,
                     maxLength: 15,
-                    minLength: 0
+                    minLength: 0,
+                    message: 'Domain is too long'
                 },
-                valid: false,
+                isValid: false,
                 touched: false
             },
             showByKeyword: {
-                elementDisplay: 'normal',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: '<only show by keyword>'
+                    placeholder: '<show by keyword>'
                 },
                 value: '',
                 validation: {
                     required: false,
                     maxLength: 50,
-                    minLength: 0
+                    minLength: 0,
+                    message: 'Keyword is too long'
                 },
-                valid: false,
+                isValid: false,
                 touched: false
             }
         },
         subreddits: [],
         filters: []
-   }
+    }
 
     getSubreddits () {
         this.props.onGetSubredditsStart();
@@ -327,7 +328,7 @@ class Filters extends Component {
         this.clearControlsHandler();
     }
 
-    // Set isActive property for removed filters to false
+    // Set `isActive` property to false for removed filters
     removeControlsHandler = (filtersId) => {
         const index = this.state.filters.findIndex(filter => filter.id === filtersId);
         let filters = cloneDeep(this.state.filters);
@@ -471,19 +472,19 @@ class Filters extends Component {
             return (
                 <Auxiliary>
                     {elementsArray.map(controlElement => (
-                        <Input 
-                            key={`${keyPrefix}${controlElement.id}`}
-                            keyPrefix={keyPrefix}
-                            elementDisplay={controlElement.config.elementDisplay}
-                            elementType={controlElement.config.elementType}
-                            elementConfig={controlElement.config.elementConfig}
-                            options={this.state.subreddits}
-                            value={controlElement.config.value}
-                            invalid={!controlElement.config.valid}
-                            shouldValidate={controlElement.config.validation}
-                            touched={controlElement.config.touched}
-                            disabled={!shouldEnable}
-                            changed={(event) => this.controlsChangedHandler(event, keyPrefix, controlElement.id)} />))}
+                        <Form.Group as={Col} lg="2">
+                            <Input 
+                                key={`${keyPrefix}${controlElement.id}`}
+                                keyPrefix={keyPrefix}
+                                elementType={controlElement.config.elementType}
+                                elementConfig={controlElement.config.elementConfig}
+                                options={this.state.subreddits}
+                                value={controlElement.config.value}
+                                invalid={!controlElement.config.valid}
+                                touched={controlElement.config.touched}
+                                disabled={!shouldEnable}
+                                changed={(event) => this.controlsChangedHandler(event, keyPrefix, controlElement.id)} />
+                        </Form.Group>))}
                 </Auxiliary>
             )
         };
@@ -498,14 +499,18 @@ class Filters extends Component {
 
         const createFiltersPrefix = '';
         let createFiltersForm = 
-            <Auxiliary>
-                {controlsForm(controlsElementsArray, createFiltersPrefix, this.props.didGetSubreddits)}
-                <Button 
-                    buttonType="Successful" 
-                    disabled={!this.state.controls.subreddit.value}
-                    clicked={this.addControlsHandler}>+</Button>
-                <Button buttonType="Successful" clicked={this.clearControlsHandler}>-</Button>
-            </Auxiliary>;
+            <Form>
+                <Form.Row>
+                    {controlsForm(controlsElementsArray, createFiltersPrefix, this.props.didGetSubreddits)}
+                    <ButtonToolbar>
+                        <Button 
+                            buttonType="Successful" 
+                            disabled={!this.state.controls.subreddit.value}
+                            clicked={this.addControlsHandler}>+</Button>
+                        <Button buttonType="Successful" clicked={this.clearControlsHandler}>-</Button>
+                    </ButtonToolbar>
+                </Form.Row>
+            </Form>;
 
         let filtersForm = null;
         if (this.props.loading) {
@@ -529,14 +534,12 @@ class Filters extends Component {
                     }
     
                     filtersFormArray.push(
-                        <Auxiliary key={filterElementsArray[0].filtersId}>
-                            <Auxiliary>
-                                {controlsForm(filterElementsArray, filterElementsArray[0].filtersId, this.props.didGetFilters)}
-                            </Auxiliary>
-                            <Auxiliary>
+                        <Form.Row key={filterElementsArray[0].filtersId}>
+                            {controlsForm(filterElementsArray, filterElementsArray[0].filtersId, this.props.didGetFilters)}
+                            <ButtonToolbar>
                                 <Button buttonType="Successful" clicked={() => this.removeControlsHandler(filterElementsArray[0].filtersId)}>-</Button>
-                            </Auxiliary>
-                        </Auxiliary>
+                            </ButtonToolbar>
+                        </Form.Row>
                     );
                 }
             }
@@ -571,7 +574,6 @@ class Filters extends Component {
         return (
             <Auxiliary className={classes.Filters}>
                 {filtersRedirect}
-                {errorMessage}
                 {createFiltersForm}                    
                 <hr />
                 {filtersForm}

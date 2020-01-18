@@ -20,7 +20,7 @@ const input = (props) => {
                 onChange={props.changed} />;
             break;
         case('select'):
-            inputElement = <select 
+            inputElement = <Form.Control as="select"
                     className={inputClasses.join(' ')}
                     {...props.elementConfig} 
                     value={props.value}
@@ -30,7 +30,7 @@ const input = (props) => {
                             {option.value}
                         </option>
                     ))}
-                </select>;
+                </Form.Control>
             break;
         default:
             inputElement = <Form.Control

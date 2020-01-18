@@ -36,7 +36,7 @@ const navigationItems = (props) => {
 
     return (
         <Nav className={classes.NavigationItems}>    
-            {items};
+            {items}
         </Nav>
     );
 }
