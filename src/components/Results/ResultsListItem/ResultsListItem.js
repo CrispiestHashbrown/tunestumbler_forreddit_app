@@ -44,7 +44,7 @@ const materialClasses = makeStyles({
 
 const result = (props) => (
     <Container maxWidth="xl">
-        <Paper key={props.id} variant="outlined" className={materialClasses().paper}>
+        <Paper variant="outlined" className={materialClasses().paper}>
             <Grid container wrap="nowrap">
                 <Grid item>
                     <Typography className={materialClasses().score}>

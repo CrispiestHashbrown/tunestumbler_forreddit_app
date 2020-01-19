@@ -8,6 +8,7 @@ import * as actions from '../../store/actions/index';
 
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Alert from '../../components/UI/Alerts/ErrorAlert/Alert';
 
 class Connect extends Component {
     componentDidMount = () => {
@@ -29,7 +30,7 @@ class Connect extends Component {
             spinner = <Spinner />
         }
 
-        let errorMessage = null;
+        let errorMessage = '';
         if (this.props.error) {
             switch(this.props.error.status) {
                 case 400:
@@ -41,19 +42,19 @@ class Connect extends Component {
                     errorMessage = `Connect your Reddit account to continue.`;
                     break;
                 default:
-                    errorMessage = null;
+                    errorMessage = '';
             }
         }
 
         let connectRedirect = null;
         if (this.props.isConnected) {
-            connectRedirect = <Redirect to="/filters" />
+            connectRedirect = <Redirect to="/new" />
         }
 
         return (
             <div className={classes.Connect}>
                 {connectRedirect}
-                {errorMessage}
+                <Alert errorMessage={errorMessage}/>
                 <br></br>
                 <br></br>
                 <Button 

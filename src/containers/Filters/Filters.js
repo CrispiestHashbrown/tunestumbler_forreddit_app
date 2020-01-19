@@ -13,6 +13,7 @@ import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Alert from '../../components/UI/Alerts/ErrorAlert/Alert';
 
 class Filters extends Component {
     componentDidMount() {
@@ -36,12 +37,12 @@ class Filters extends Component {
             touched: true
         },
         minScore: {
-            elementType: 'input',
+            elementType: 'number',
             elementConfig: {
                 type: 'number',
                 placeholder: '<min score>'
             },
-            value: '',
+            value: '1',
             validation: {
                 required: false,
                 isNumeric: true,
@@ -62,7 +63,7 @@ class Filters extends Component {
             value: '',
             validation: {
                 required: false,
-                maxLength: 15,
+                maxLength: 50,
                 minLength: 0,
                 message: 'Domain is too long'
             },
@@ -94,7 +95,7 @@ class Filters extends Component {
             value: '',
             validation: {
                 required: false,
-                maxLength: 15,
+                maxLength: 50,
                 minLength: 0,
                 message: 'Domain is too long'
             },
@@ -137,12 +138,12 @@ class Filters extends Component {
                 touched: true
             },
             minScore: {
-                elementType: 'input',
+                elementType: 'number',
                 elementConfig: {
                     type: 'number',
                     placeholder: '<min score>'
                 },
-                value: '',
+                value: '1',
                 validation: {
                     required: false,
                     isNumeric: true,
@@ -472,15 +473,16 @@ class Filters extends Component {
             return (
                 <Auxiliary>
                     {elementsArray.map(controlElement => (
-                        <Form.Group as={Col} lg="2">
+                        <Form.Group key={`form-${keyPrefix}${controlElement.id}`} as={Col} lg="2">
                             <Input 
-                                key={`${keyPrefix}${controlElement.id}`}
+                                id={`${keyPrefix}${controlElement.id}`}
                                 keyPrefix={keyPrefix}
                                 elementType={controlElement.config.elementType}
                                 elementConfig={controlElement.config.elementConfig}
                                 options={this.state.subreddits}
                                 value={controlElement.config.value}
                                 invalid={!controlElement.config.valid}
+                                validation={controlElement.config.validation}
                                 touched={controlElement.config.touched}
                                 disabled={!shouldEnable}
                                 changed={(event) => this.controlsChangedHandler(event, keyPrefix, controlElement.id)} />
@@ -555,10 +557,10 @@ class Filters extends Component {
                     errorMessage = `Error: Bad request. Could not save filters.`;
                     break;
                 case 404:
-                    errorMessage = `Error: No subreddits found on your Reddit account.`;
+                    errorMessage = `Error 404: No subreddits found on your Reddit account.`;
                     break;
                 case 500:
-                    errorMessage = `Error: Internal Server Error or Reddit Error. Try again later.`;
+                    errorMessage = `Error 500: Internal Server Error or Reddit Error. Try again later.`;
                     break;
                 default:
                     errorMessage = null;
@@ -574,6 +576,7 @@ class Filters extends Component {
         return (
             <Auxiliary className={classes.Filters}>
                 {filtersRedirect}
+                <Alert errorMessage={errorMessage}/>
                 {createFiltersForm}                    
                 <hr />
                 {filtersForm}

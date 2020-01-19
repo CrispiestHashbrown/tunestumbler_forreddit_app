@@ -7,6 +7,7 @@ import * as actions from '../../store/actions/index';
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import ResultsListItem from '../../components/Results/ResultsListItem/ResultsListItem';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Alert from '../../components/UI/Alerts/ErrorAlert/Alert';
 
 class BestResults extends Component {
     componentDidMount() {
@@ -25,7 +26,7 @@ class BestResults extends Component {
                 const redditBaseUrl = 'https://www.reddit.com';
                 resultsListArray.push(
                     <ResultsListItem 
-                        id={this.props.results[index].resultsId}
+                        key={this.props.results[index].id}
                         score={this.props.results[index].score}
                         title={this.props.results[index].title}
                         domain={this.props.results[index].domain}
@@ -40,7 +41,7 @@ class BestResults extends Component {
             resultsList = resultsListArray;
         }
 
-        let errorMessage = null;
+        let errorMessage = '';
         if (this.props.error) {
             switch(this.props.error.status) {
                 case 400:
@@ -48,13 +49,13 @@ class BestResults extends Component {
                     errorMessage = `Sorry, no results found. Try adjusting your filters.`;
                     break;
                 case 404:
-                    errorMessage = `Error: No results found. Make sure you set your filters.`;
+                    errorMessage = `Error 404: No results found. Make sure you set your filters.`;
                     break;
                 case 500:
-                    errorMessage = `Error: Internal Server Error or Reddit Error. Try again later.`;
+                    errorMessage = `Error 500: Internal Server Error or Reddit Error. Try again later.`;
                     break;
                 default:
-                    errorMessage = null;
+                    errorMessage = '';
             }
         }
 
@@ -65,7 +66,7 @@ class BestResults extends Component {
 
         return (
             <Auxiliary>
-                {errorMessage}
+                <Alert errorMessage={errorMessage}/>
                 {loading}
                 <InfiniteScroll
                     dataLength={resultsList.length}

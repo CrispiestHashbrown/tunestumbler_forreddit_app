@@ -9,6 +9,7 @@ import * as actions from '../../store/actions/index';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Alert from '../../components/UI/Alerts/ErrorAlert/Alert';
 
 class Login extends Component {
     state = {
@@ -22,7 +23,8 @@ class Login extends Component {
                 value: '',
                 validation: {
                     required: true,
-                    isEmail: true
+                    isEmail: true,
+                    message: 'Email is invalid'
                 },
                 valid: false,
                 touched: false
@@ -36,7 +38,9 @@ class Login extends Component {
                 value: '',
                 validation: {
                     required: true,
-                    minLength: 8
+                    minLength: 8,
+                    maxLength: 30,
+                    message: 'Password must be between 8 and 30 characters'
                  },
                 valid: false,
                 touched: false
@@ -122,7 +126,7 @@ class Login extends Component {
                     elementConfig={formElement.config.elementConfig}
                     value={formElement.config.value}
                     invalid={!formElement.config.valid}
-                    shouldValidate={formElement.config.validation}
+                    validation={formElement.config.validation}
                     touched={formElement.config.touched}
                     changed={(event) => this.inputChangedHandler(event, formElement.id)} />
             </Form.Group>
@@ -139,7 +143,7 @@ class Login extends Component {
                     errorMessage = `Error: Incorrect email or password.`;
                     break;
                     case 500:
-                        errorMessage = `Error: Internal Server Error or Reddit Error. Try again later.`;
+                        errorMessage = `Error 500: Internal Server Error or Reddit Error. Try again later.`;
                         break;
                     default:
                     errorMessage = `Error: Could not resolve login request. Try again later.`;
@@ -154,7 +158,7 @@ class Login extends Component {
         return (
             <div>
                 {loginRedirect}
-                {errorMessage}
+                <Alert errorMessage={errorMessage}/>
                 <Form className={classes.Login} onKeyPress={this.onEnter} noValidate>
                     {form}
                     <Button 

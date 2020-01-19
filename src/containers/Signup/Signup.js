@@ -9,6 +9,7 @@ import * as actions from '../../store/actions/index';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Alert from '../../components/UI/Alerts/ErrorAlert/Alert';
 
 class Signup extends Component {
     state = {
@@ -22,7 +23,8 @@ class Signup extends Component {
                 value: '',
                 validation: {
                     required: true,
-                    isEmail: true
+                    isEmail: true,
+                    message: 'Email is invalid'
                 },
                 valid: false,
                 touched: false
@@ -36,7 +38,9 @@ class Signup extends Component {
                 value: '',
                 validation: {
                     required: true,
-                    minLength: 8
+                    minLength: 8,
+                    maxLength: 30,
+                    message: 'Password must be between 8 and 30 characters'
                  },
                 valid: false,
                 touched: false
@@ -122,7 +126,7 @@ class Signup extends Component {
                     elementConfig={formElement.config.elementConfig}
                     value={formElement.config.value}
                     invalid={!formElement.config.valid}
-                    shouldValidate={formElement.config.validation}
+                    validation={formElement.config.validation}
                     touched={formElement.config.touched}
                     changed={(event) => this.inputChangedHandler(event, formElement.id)} />
             </Form.Group>
@@ -132,14 +136,14 @@ class Signup extends Component {
             form = <Spinner />
         }
 
-        let errorMessage = null;
+        let errorMessage = '';
         if (this.props.error) {
             switch(this.props.error.status) {
                 case 400:
-                    errorMessage = `Error: ${this.props.error.data.errors[0].title}`;
+                    errorMessage = `Error: Try using a different email.`;
                     break;
                 case 500:
-                    errorMessage = `Error: Internal Server Error or Reddit Error. Try again later.`;
+                    errorMessage = `Error 500: Internal Server Error or Reddit Error. Try again later.`;
                     break;
                 default:
                     errorMessage = `Error: Could not resolve signup request. Try again later.`;
@@ -154,7 +158,7 @@ class Signup extends Component {
         return (
             <div>
                 {signupRedirect}
-                {errorMessage}
+                <Alert errorMessage={errorMessage}/>
                 <Form className={classes.Signup} onKeyPress={this.onEnter} noValidate>
                     {form}
                     <Button 

@@ -60,7 +60,7 @@ export class App extends Component {
           <Route path="/top" component={TopResults} />
           {/* <Route path="/settings" component={Settings} /> */}
           <Route path="/logout" component={Logout} />
-          <Redirect to="/filters" />
+          <Redirect to="/new" />
         </Switch>
       );
     }
