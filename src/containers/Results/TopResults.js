@@ -2,16 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import classes from './Results.css';
 import * as actions from '../../store/actions/index';
 
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import ResultsListItem from '../../components/Results/ResultsListItem/ResultsListItem';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
-class Results extends Component {
+class TopResults extends Component {
     componentDidMount() {
-        this.props.onGetResults(this.props.location.pathname);
+        this.props.onGetResults();
     }
 
     getNextResultsHandler = () => {
@@ -65,9 +64,7 @@ class Results extends Component {
         }
 
         return (
-            <Auxiliary className={classes.Results}>
-                Results: 
-                <br></br>
+            <Auxiliary>
                 {errorMessage}
                 {loading}
                 <InfiniteScroll
@@ -92,17 +89,17 @@ const mapStateToProps = (state) => {
         nextUri: state.topResults.nextUri,
         afterId: state.topResults.afterId,
         didGetNextResults: state.topResults.didGetNextResults,
-        error: state.newResults.error,
+        error: state.topResults.error,
         loading: state.topResults.loading
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onGetResults: (resultsRoute) => dispatch(actions.topGetResults(resultsRoute)),
+        onGetResults: () => dispatch(actions.topGetResults()),
         onGetNextResults: (results, nextUri, afterId) => dispatch(actions.topGetNextResults(results, nextUri, afterId))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Results);
+export default connect(mapStateToProps, mapDispatchToProps)(TopResults);
 
