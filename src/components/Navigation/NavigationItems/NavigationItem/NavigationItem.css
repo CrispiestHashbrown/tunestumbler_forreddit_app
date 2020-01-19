@@ -1,16 +1,18 @@
 .NavigationItem {
     margin: 10px 0;
     box-sizing: border-box;
-    padding: 16px 10px;
+    padding: 13px 10px;
     display: block;
     width: 100%;
     align-items: center;
+    background-color: #262626;
 }
 
 .NavigationItem a {
     color: #8CB3D9;
+    font-weight: bold;
     text-decoration: none;
-    width: 170%;
+    width: 110%;
     box-sizing: border-box;
     display: block;
 }

@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import classes from './Results.css';
 import * as actions from '../../store/actions/index';
 
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import ResultsListItem from '../../components/Results/ResultsListItem/ResultsListItem';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Alert from '../../components/UI/Alerts/ErrorAlert/Alert';
 
-class Results extends Component {
+class BestResults extends Component {
     componentDidMount() {
-        this.props.onGetResults(this.props.location.pathname);
+        this.props.onGetResults();
     }
 
     getNextResultsHandler = () => {
@@ -26,7 +26,7 @@ class Results extends Component {
                 const redditBaseUrl = 'https://www.reddit.com';
                 resultsListArray.push(
                     <ResultsListItem 
-                        id={this.props.results[index].resultsId}
+                        key={this.props.results[index].id}
                         score={this.props.results[index].score}
                         title={this.props.results[index].title}
                         domain={this.props.results[index].domain}
@@ -41,7 +41,7 @@ class Results extends Component {
             resultsList = resultsListArray;
         }
 
-        let errorMessage = null;
+        let errorMessage = '';
         if (this.props.error) {
             switch(this.props.error.status) {
                 case 400:
@@ -49,13 +49,13 @@ class Results extends Component {
                     errorMessage = `Sorry, no results found. Try adjusting your filters.`;
                     break;
                 case 404:
-                    errorMessage = `Error: No results found. Make sure you set your filters.`;
+                    errorMessage = `Error 404: No results found. Make sure you set your filters.`;
                     break;
                 case 500:
-                    errorMessage = `Error: Internal Server Error or Reddit Error. Try again later.`;
+                    errorMessage = `Error 500: Internal Server Error or Reddit Error. Try again later.`;
                     break;
                 default:
-                    errorMessage = null;
+                    errorMessage = '';
             }
         }
 
@@ -65,10 +65,8 @@ class Results extends Component {
         }
 
         return (
-            <Auxiliary className={classes.Results}>
-                Results: 
-                <br></br>
-                {errorMessage}
+            <Auxiliary>
+                <Alert errorMessage={errorMessage}/>
                 {loading}
                 <InfiniteScroll
                     dataLength={resultsList.length}
@@ -92,17 +90,17 @@ const mapStateToProps = (state) => {
         nextUri: state.bestResults.nextUri,
         afterId: state.bestResults.afterId,
         didGetNextResults: state.bestResults.didGetNextResults,
-        error: state.newResults.error,
+        error: state.bestResults.error,
         loading: state.bestResults.loading
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onGetResults: (resultsRoute) => dispatch(actions.bestGetResults(resultsRoute)),
+        onGetResults: () => dispatch(actions.bestGetResults()),
         onGetNextResults: (results, nextUri, afterId) => dispatch(actions.bestGetNextResults(results, nextUri, afterId))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Results);
+export default connect(mapStateToProps, mapDispatchToProps)(BestResults);
 

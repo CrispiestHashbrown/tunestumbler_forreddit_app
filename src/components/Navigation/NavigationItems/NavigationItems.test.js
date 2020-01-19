@@ -37,7 +37,7 @@ describe('If logged in and not connected, then <NavigationItems />', () => {
     });
 
     it(`should render three '<NavigationItem />' elements`, () => {
-        expect(wrapper.find(NavigationItem)).toHaveLength(3);
+        expect(wrapper.find(NavigationItem)).toHaveLength(2);
     });
 
     it(`should render the 'Connect' element`, () => {
@@ -45,10 +45,10 @@ describe('If logged in and not connected, then <NavigationItems />', () => {
             .toEqual(true);
     });
 
-    it(`should render the 'Settings' element`, () => {
-        expect(wrapper.contains(<NavigationItem link="/settings">Settings</NavigationItem>))
-            .toEqual(true);
-    });
+    // it(`should render the 'Settings' element`, () => {
+    //     expect(wrapper.contains(<NavigationItem link="/settings">Settings</NavigationItem>))
+    //         .toEqual(true);
+    // });
 
     it(`should render the 'Logout' element`, () => {
         expect(wrapper.contains(<NavigationItem link="/logout">Logout</NavigationItem>))
@@ -64,7 +64,7 @@ describe('If logged in and connected, then <NavigationItems />', () => {
     });
 
     it(`should render seven '<NavigationItem />' elements`, () => {
-        expect(wrapper.find(NavigationItem)).toHaveLength(7);
+        expect(wrapper.find(NavigationItem)).toHaveLength(6);
     });
 
     it(`should render the 'New' element`, () => {
@@ -92,10 +92,10 @@ describe('If logged in and connected, then <NavigationItems />', () => {
             .toEqual(true);
     });
 
-    it(`should render the 'Settings' element`, () => {
-        expect(wrapper.contains(<NavigationItem link="/settings">Settings</NavigationItem>))
-            .toEqual(true);
-    });
+    // it(`should render the 'Settings' element`, () => {
+    //     expect(wrapper.contains(<NavigationItem link="/settings">Settings</NavigationItem>))
+    //         .toEqual(true);
+    // });
 
     it(`should render the 'Logout' element`, () => {
         expect(wrapper.contains(<NavigationItem link="/logout">Logout</NavigationItem>))
