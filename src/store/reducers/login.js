@@ -3,8 +3,8 @@ import { updateObject } from '../utility';
 
 const initialState = {
     loginToken: null,
-    timestamp: null,
-    error: null
+    error: null,
+    loading: false
 };
 
 const loginStart = (state) => {

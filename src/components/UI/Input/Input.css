@@ -32,31 +32,3 @@
     border: 1px solid red;
     background-color: salmon;
 }
-
-.RowNormal {
-    float: left;
-    outline: none;
-    font: inherit;
-    margin: 0;
-    list-style: none;
-    white-space: nowrap;
-    flex-flow: row;
-    align-items: center;
-    height: 100%;
-    min-width: 200px;
-    box-sizing: border-box;
-}
-
-.RowSmall {
-    float: left;
-    outline: none;
-    font: inherit;
-    margin: 0;
-    list-style: none;
-    white-space: nowrap;
-    flex-flow: row;
-    align-items: center;
-    height: 100%;
-    width: 100px;
-    box-sizing: border-box;
-}

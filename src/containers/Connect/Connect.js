@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
+import { Carousel } from 'react-bootstrap';
 import classes from './Connect.css';
 import * as actions from '../../store/actions/index';
 
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Alert from '../../components/UI/Alerts/ErrorAlert/Alert';
 
 class Connect extends Component {
     componentDidMount = () => {
@@ -28,7 +30,7 @@ class Connect extends Component {
             spinner = <Spinner />
         }
 
-        let errorMessage = null;
+        let errorMessage = '';
         if (this.props.error) {
             switch(this.props.error.status) {
                 case 400:
@@ -37,44 +39,52 @@ class Connect extends Component {
                     errorMessage = `Error: Bad request.`;
                     break;
                 case 500:
-                    errorMessage = `Error: Internal Server Error or Reddit Error. Try again later.`;
+                    errorMessage = `Connect your Reddit account to continue.`;
                     break;
                 default:
-                    errorMessage = null;
+                    errorMessage = '';
             }
         }
 
         let connectRedirect = null;
         if (this.props.isConnected) {
-            connectRedirect = <Redirect to="/filters" />
+            connectRedirect = <Redirect to="/new" />
         }
 
         return (
             <div className={classes.Connect}>
                 {connectRedirect}
-                {errorMessage}
-                <br></br>
-                <p>By clicking the 'Connect your Reddit account' button,</p>
-                <p>You agree to grant Tunestumbler.com the</p>
-                <p>following permissions (scopes) to your Reddit account:</p>
-                <ul>
-                    <li>read</li>
-                    <li>history</li>
-                    <li>vote</li>
-                    <li>save</li>
-                    <li>account</li>
-                    <li>subscribe</li>
-                    <li>mysubreddits</li>
-                </ul>
+                <Alert errorMessage={errorMessage}/>
                 <br></br>
                 <br></br>
-                <p>You may review these permissions or unauthorize</p>
-                <p>Tunestumbler.com at any time by visiting </p>
-                <p>Reddit preferences>apps and clicking revoke access</p>
-
                 <Button 
                     clicked={this.connectHandler}
                     buttonType="Successful">Connect your Reddit account</Button>
+                <br></br>
+                <br></br>
+                <Carousel>
+                    <Carousel.Item>
+                        <img 
+                            src={require('../../assets/PreferencesHighlighted.png')}
+                            className="d-inline-block align-top"
+                            alt="Highlighted preferences" />
+                        <br></br>
+                        <br></br>
+                        <p>By visiting your Reddit <mark>preferences</mark></p>
+                        <br></br>
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <img 
+                            src={require('../../assets/PermissionsHighlighted.png')}
+                            className="d-inline-block align-top"
+                            alt="Highlighted permissions" />
+                        <br></br>
+                        <br></br>
+                        <p>You can view allowed <mark>permissions</mark></p>
+                        <br></br>
+                    </Carousel.Item>
+                </Carousel>
+                <br></br>
                 {spinner}
            </div>
         );

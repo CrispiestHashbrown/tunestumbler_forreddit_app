@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Nav } from 'react-bootstrap';
 import classes from './NavigationItems.css';
 import NavigationItem from './NavigationItem/NavigationItem';
 import Auxiliary from '../../../hoc/Auxiliary/Auxiliary';
@@ -15,7 +16,7 @@ const navigationItems = (props) => {
         items = 
             <Auxiliary>
                 <NavigationItem link="/connect">Connect</NavigationItem>
-                <NavigationItem link="/settings">Settings</NavigationItem>
+                {/* <NavigationItem link="/settings">Settings</NavigationItem> */}
                 <NavigationItem link="/logout">Logout</NavigationItem>
             </Auxiliary>;
     }
@@ -28,15 +29,15 @@ const navigationItems = (props) => {
                 <NavigationItem link="/hot">Hot</NavigationItem>
                 <NavigationItem link="/best">Best</NavigationItem>
                 <NavigationItem link="/filters">Filters</NavigationItem>
-                <NavigationItem link="/settings">Settings</NavigationItem>
+                {/* <NavigationItem link="/settings">Settings</NavigationItem> */}
                 <NavigationItem link="/logout">Logout</NavigationItem>
             </Auxiliary>;
     }
 
     return (
-        <ul className={classes.NavigationItems}>    
-            {items};
-        </ul>
+        <Nav className={classes.NavigationItems}>    
+            {items}
+        </Nav>
     );
 }
 
