@@ -67,6 +67,7 @@ class NewResults extends Component {
         return (
             <Auxiliary>
                 <Alert errorMessage={errorMessage}/>
+                {loading}
                 <InfiniteScroll
                     dataLength={resultsList.length}
                     next={this.getNextResultsHandler}
@@ -77,7 +78,6 @@ class NewResults extends Component {
                     }>
                     {resultsList}
                 </InfiniteScroll>
-                {loading}
             </Auxiliary>
         );
     }
