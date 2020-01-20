@@ -23,7 +23,9 @@ npm test
 
 
 ## Usage
-- This web application only works the the Reddit API. It requires you to login to Reddit to be able to use your subscribed Subreddits.
+- This web application only works with the Reddit API. It requires you to login to Reddit to be able to use your subscribed Subreddits. 
+
+- Reddit tokens expire every hour, and the website attempts to automatically refresh the token.
 
 - To set any filters, you must be subscribed to at least one Subreddit.
 
