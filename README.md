@@ -35,4 +35,4 @@ npm test
 - The plan is to treat the filtered results as playlists that will feed into Youtube and Spotify browser extensions to make finding new music more convenient.
 
 ## Contributions
-- Improvements are welcome
+- Contribution process is not decided yet... but improvements are welcome!
