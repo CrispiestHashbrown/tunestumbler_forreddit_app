@@ -74,7 +74,7 @@ class TopResults extends Component {
                     hasMore={this.props.afterId}
                     loader={<Spinner />}
                     endMessage={
-                        <p>End of results.</p>
+                        <p><b>End of results.</b></p>
                     }>
                     {resultsList}
                 </InfiniteScroll>
