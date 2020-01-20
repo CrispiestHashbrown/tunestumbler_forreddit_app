@@ -8,6 +8,7 @@ import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import ResultsListItem from '../../components/Results/ResultsListItem/ResultsListItem';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Alert from '../../components/UI/Alerts/ErrorAlert/Alert';
+import classes from './Results.css';
 
 class BestResults extends Component {
     componentDidMount() {
@@ -60,8 +61,13 @@ class BestResults extends Component {
         }
 
         let loading = null;
-        if (!this.props.didGetResults) {
+        if (this.props.loading) {
             loading = <Spinner />
+        }
+
+        let scrollMessage = null;
+        if (this.props.afterId) {
+            scrollMessage = <p><b>Scroll to load more results.</b></p>;
         }
 
         return (
@@ -69,6 +75,7 @@ class BestResults extends Component {
                 <Alert errorMessage={errorMessage}/>
                 {loading}
                 <InfiniteScroll
+                    className={classes.ResultsBody}
                     dataLength={resultsList.length}
                     next={this.getNextResultsHandler}
                     hasMore={this.props.afterId}
@@ -77,6 +84,8 @@ class BestResults extends Component {
                         <p><b>End of results.</b></p>
                     }>
                     {resultsList}
+                    <br></br>
+                    {scrollMessage}
                 </InfiniteScroll>
             </Auxiliary>
         );
