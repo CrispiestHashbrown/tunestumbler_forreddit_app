@@ -23,7 +23,7 @@ npm test
 
 
 ## Usage
-- This web application only works with the Reddit API. It requires you to login to Reddit to be able to use your subscribed Subreddits. 
+- This web application is designed to work with the ![Tunestumbler API](https://github.com/CrispiestHashbrown/tunestumbler-wrapper-for-reddit). It also requires you to login to ![Reddit](https://www.reddit.com/) to be able to create filters from your subscribed Subreddits. 
 
 - Reddit tokens expire every hour, and the website attempts to automatically refresh the token.
 
