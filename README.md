@@ -1,5 +1,5 @@
 # tunestumbler-for-reddit
-Reactjs website for creating daily music playlists from filtered New/Top/Hot/Best Reddit posts.
+[tunestumbler.com](https://www.tunestumbler.com/), a Reactjs website for aggregating daily music from filtered New/Top/Hot/Best Reddit posts. 
 
  ![tunestumbler-walkthrough](https://media.giphy.com/media/UQ74ZZsCLHeobf23gJ/giphy.gif)
 
