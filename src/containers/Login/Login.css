@@ -1,10 +1,12 @@
 .Login {
     margin: 20px auto;
     max-width: 450px;
+    background-color: rgb(255, 255, 255);
     box-shadow: 0 2px 3px #ccc;
     border: 1px solid #eee;
     padding: 20px;
     box-sizing: border-box;
+    text-align: left;
 }
 
 .LoginLabel {
@@ -14,4 +16,12 @@
 
 .LoginButton {
     width: 100%;
+}
+
+.LoginJumbotron {
+    background-image: url('../../assets/tunestumbler-results-blurred.png');
+    background-size: cover;
+    height: 80vh;
+    font-weight: bold;
+    text-align: center;
 }
