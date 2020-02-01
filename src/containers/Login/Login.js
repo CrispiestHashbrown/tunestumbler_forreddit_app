@@ -10,6 +10,7 @@ import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Alert from '../../components/UI/Alerts/ErrorAlert/Alert';
+import Jumbotron from '../../components/UI/Jumbotron/Jumbotron';
 
 class Login extends Component {
     state = {
@@ -132,6 +133,15 @@ class Login extends Component {
             </Form.Group>
         ));
 
+        let fullForm = 
+            <Form className={classes.Login} onKeyPress={this.onEnter} noValidate>
+                {form}
+                <Button 
+                    className={classes.LoginButton} 
+                    buttonType="Successful" 
+                    clicked={this.submitHandler}>Log in</Button>
+            </Form>
+
         if (this.props.loading) {
             form = <Spinner />
         }
@@ -142,10 +152,10 @@ class Login extends Component {
                 case 403:
                     errorMessage = `Error: Incorrect email or password.`;
                     break;
-                    case 500:
-                        errorMessage = `Error 500: Internal Server Error or Reddit Error. Try again later.`;
-                        break;
-                    default:
+                case 500:
+                    errorMessage = `Error 500: Internal Server Error or Reddit Error. Try again later.`;
+                    break;
+                default:
                     errorMessage = `Error: Could not resolve login request. Try again later.`;
             }
         }
@@ -158,14 +168,12 @@ class Login extends Component {
         return (
             <div>
                 {loginRedirect}
-                <Alert errorMessage={errorMessage}/>
-                <Form className={classes.Login} onKeyPress={this.onEnter} noValidate>
-                    {form}
-                    <Button 
-                        className={classes.LoginButton} 
-                        buttonType="Successful" 
-                        clicked={this.submitHandler}>Log in</Button>
-                </Form>
+                <Alert errorMessage={errorMessage} />
+                <Jumbotron 
+                    jumbotronClass={classes.LoginJumbotron}
+                    title='Log in to Tunestumbler!'
+                    message='Tunestumbler lets you aggregate music posts from your favourite music subreddits.' 
+                    form={fullForm} />
            </div>
         );
     }

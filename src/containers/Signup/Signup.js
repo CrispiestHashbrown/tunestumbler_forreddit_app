@@ -10,6 +10,7 @@ import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Alert from '../../components/UI/Alerts/ErrorAlert/Alert';
+import Jumbotron from '../../components/UI/Jumbotron/Jumbotron';
 
 class Signup extends Component {
     state = {
@@ -132,6 +133,15 @@ class Signup extends Component {
             </Form.Group>
         ));
 
+        let fullForm = 
+            <Form className={classes.Signup} onKeyPress={this.onEnter} noValidate>
+                {form}
+                <Button 
+                    className={classes.SignupButton} 
+                    buttonType="Successful" 
+                    clicked={this.submitHandler}>Sign up</Button>
+            </Form>
+
         if (this.props.loading) {
             form = <Spinner />
         }
@@ -159,13 +169,11 @@ class Signup extends Component {
             <div>
                 {signupRedirect}
                 <Alert errorMessage={errorMessage}/>
-                <Form className={classes.Signup} onKeyPress={this.onEnter} noValidate>
-                    {form}
-                    <Button 
-                        className={classes.SignupButton} 
-                        buttonType="Successful" 
-                        clicked={this.submitHandler}>Sign up</Button>
-                </Form>
+                <Jumbotron 
+                    jumbotronClass={classes.SignupJumbotron}
+                    title='Create a new Tunestumbler account!'
+                    message='Upon logging in, you will be asked to connect your Reddit account as well.' 
+                    form={fullForm} />
            </div>
         );
     }
