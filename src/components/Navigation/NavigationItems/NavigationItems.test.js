@@ -19,12 +19,12 @@ describe('If not logged in, then <NavigationItems />', () => {
     });
 
     it(`should render the 'Log in' element`, () => {
-        expect(wrapper.contains(<NavigationItem link="/login">Log in</NavigationItem>))
+        expect(wrapper.contains(<NavigationItem link="/login">Login</NavigationItem>))
             .toEqual(true);
     });
 
     it(`should render the 'Sign up' element`, () => {
-        expect(wrapper.contains(<NavigationItem link="/signup">Sign up</NavigationItem>))
+        expect(wrapper.contains(<NavigationItem link="/signup">Signup</NavigationItem>))
             .toEqual(true);
     });
 });
