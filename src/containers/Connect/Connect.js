@@ -70,7 +70,7 @@ class Connect extends Component {
                             alt="Highlighted preferences" />
                         <br></br>
                         <br></br>
-                        <p>By visiting your Reddit <mark>preferences</mark></p>
+                        <p>By visiting your Reddit <mark>preferences...</mark></p>
                         <br></br>
                     </Carousel.Item>
                     <Carousel.Item>
@@ -80,7 +80,7 @@ class Connect extends Component {
                             alt="Highlighted permissions" />
                         <br></br>
                         <br></br>
-                        <p>You can view allowed <mark>permissions</mark></p>
+                        <p>...You can view allowed <mark>permissions</mark></p>
                         <br></br>
                     </Carousel.Item>
                 </Carousel>
