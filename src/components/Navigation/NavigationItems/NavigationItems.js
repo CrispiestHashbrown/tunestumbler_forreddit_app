@@ -8,8 +8,8 @@ import Auxiliary from '../../../hoc/Auxiliary/Auxiliary';
 const navigationItems = (props) => {
     let items = 
         <Auxiliary>
-            <NavigationItem link="/login">Log in</NavigationItem>
-            <NavigationItem link="/signup">Sign up</NavigationItem> 
+            <NavigationItem link="/login">Login</NavigationItem>
+            <NavigationItem link="/signup">Signup</NavigationItem> 
         </Auxiliary>;
     
     if (props.isLoggedIn && !props.isConnected) {
